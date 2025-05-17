@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-web';
 
 const handlePress = () => {
-  console.log("Logged In");
+  console.log("Welcome, Logged In");
 }
 
 export default function App() {
