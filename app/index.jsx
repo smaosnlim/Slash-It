@@ -1,45 +1,31 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-web';
+
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Home from './home.jsx';
+import Login from './login.jsx';
 
 const handlePress = () => {
   console.log("Welcome, Logged In");
 }
 
-export default function App() {
+const Stack = createStackNavigator();
+  
+function RootStack() {
   return (
-    <LinearGradient
-      colors={['#5de0e6', '#004aad']}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-      style={styles.container}
-    >
-    <View style = {styles.view}>
-      <Image 
-        source={require("../assets/images/slash-it-logo.png")}
-        resizeMode='contain' 
-      />
-      <Text style = {styles.text}>Username</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Enter your username"
-        placeholderTextColor="#FFF"
-      />
-      <Text style = {styles.text}>Password</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Enter your Password"
-        placeholderTextColor="#FFF"
-      />
-      <Pressable style = {styles.button} onPress={handlePress}>
-        <Text style = {styles.text}>Log In</Text>
-      </Pressable>
-    </View>
-    </LinearGradient>
-    
+    <Stack.Navigator>
+      <Stack.Screen name="login" component={Login} />
+      <Stack.Screen name="home" component={Home} />
+    </Stack.Navigator>
+  ); 
+}
+
+export default function Navigation() {
+  return (
+      <RootStack />    
   )
 }
 
+/*
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -72,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: "steelblue"
   }
 });
-
+*/
 
 
 /*

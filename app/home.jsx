@@ -1,9 +1,10 @@
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 
-export default function Home() {
+export default function Home({navigation}) {
     return (
         <View>
-            <Text> Welcome </Text>
+            <Text> Welcome Home </Text>
+            <Button title = "Go Back" onPress = {() => navigation.goBack()}/>
         </View>
     )
 }
