@@ -26,42 +26,6 @@ export default function Navigation() {
 }
 
 /*
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  view: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  text: {
-    color: "#FFF",
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  textInput : {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    width: '80%',
-    textAlign: 'center',
-  },
-  button: {
-    width: 200,
-    backgroundColor: "steelblue"
-  }
-});
-*/
-
-
-/*
 const Cat = () => {
   const name = 'Cat';
   return <Text>Hello, I am a {name}!</Text>;

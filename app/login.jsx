@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 20,
   },
   textInput : {
     height: 40,
@@ -70,9 +70,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: '80%',
     textAlign: 'center',
+    borderRadius: 5
   },
   button: {
     width: 200,
-    backgroundColor: "steelblue"
+    backgroundColor: "steelblue",
+    borderRadius: 10,
+    margin: 10
   }
 });
