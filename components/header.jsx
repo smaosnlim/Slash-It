@@ -1,14 +1,26 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-export default function Header() {
+export default function Header({navigation}) {
     return (
         <View style = {styles.header}> 
-            <Pressable>Home</Pressable>
-            <Pressable>Expense Tracker</Pressable>
-            <Pressable>Deals</Pressable>
-            <Pressable>Investments</Pressable>
-            <Pressable>Bills</Pressable>
-            <Pressable>Log Out</Pressable>
+            <Pressable>
+                <Text>Home</Text>
+            </Pressable>
+            <Pressable>
+                <Text>Expense Tracker</Text>
+            </Pressable>
+            <Pressable>
+                <Text>Deals</Text>
+            </Pressable>
+            <Pressable>
+                <Text>Investments</Text>
+            </Pressable>
+            <Pressable>
+                <Text>Bills</Text>
+            </Pressable>
+            <Pressable>
+                <Text>Log Out</Text>
+            </Pressable>
         </View>
     )
 }

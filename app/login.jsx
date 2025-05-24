@@ -1,6 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-web';
+import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 /*
 const handlePress = () => {

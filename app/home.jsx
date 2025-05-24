@@ -7,7 +7,9 @@ export default function Home({navigation}) {
         <Header />
         <View style = {styles.container}>
             <Text> Welcome Home </Text>
-            <Pressable style = {styles.button} onPress = {() => navigation.goBack()}>Go Back</Pressable>
+            <Pressable style = {styles.button} onPress = {() => navigation.goBack()}>
+                <Text>Go Back</Text>
+            </Pressable>
         </View>
         </View>
     )
