@@ -1,21 +1,25 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/header';
 
 export default function Home({navigation}) {
     return (
-        <View>
-        <Header />
-        <View style = {styles.container}>
-            <Text> Welcome Home </Text>
-            <Pressable style = {styles.button} onPress = {() => navigation.goBack()}>
-                <Text>Go Back</Text>
-            </Pressable>
-        </View>
-        </View>
+        <SafeAreaView style = {styles.outerContainer}>
+            <Header />
+            <View style = {styles.container}>
+                <Text> Welcome Home </Text>
+                <Pressable style = {styles.button} onPress = {() => navigation.goBack()}>
+                    <Text>Go Back</Text>
+                </Pressable>
+            </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    outerContainer: {
+        flex: 1
+    },
     container: {
         flex: 1,
         justifyContent: 'center',

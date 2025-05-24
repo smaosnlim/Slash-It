@@ -20,7 +20,8 @@ export default function Login({navigation}) {
     <View style = {styles.view}>
       <Image 
         source={require("../assets/images/slash-it-logo.png")}
-        resizeMode='contain' 
+        //resizeMode='contain' 
+        style={styles.image}
       />
       <Text style = {styles.text}>Username</Text>
       <TextInput
@@ -54,6 +55,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    resizeMode: 'cover'
   },
   text: {
     color: "#FFF",
