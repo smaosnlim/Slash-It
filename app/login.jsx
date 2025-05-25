@@ -31,6 +31,9 @@ export default function Login() {
         <Pressable style={styles.button} onPress={() => router.push('/home')}>
           <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
+        <Pressable onPress={() => router.push('/signup')}>
+          <Text style= {styles.text}>Don't have an account? Sign Up</Text>
+        </Pressable>
       </View>
     </LinearGradient>
   );
@@ -70,6 +73,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 10,
     width: '100%',
+    marginTop: 15
   },
   textInput: {
     height: 48,
@@ -91,6 +95,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
+    margin: 10
   },
   buttonText: {
     color: '#1A1A2E',

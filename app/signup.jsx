@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 /*
@@ -8,49 +9,48 @@ const handlePress = () => {
 }
   */
 
-export default function SignUp({navigation}) {
+export default function SignUp() {
 
   return (
     <LinearGradient
-      colors={['#5de0e6', '#004aad']}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-      style={styles.container}
-    >
-    <View style = {styles.view}>
-      <Image 
-        source={require("../assets/images/slash-it-logo.png")}
-        //resizeMode='contain' 
-        style={styles.image}
-      />
-      <Text style = {styles.text}>Username</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Enter your username"
-        placeholderTextColor="#FFF"
-      />
-      <Text style = {styles.text}>Password</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Enter your Password"
-        placeholderTextColor="#FFF"
-        secureTextEntry={true}
-      />
-      <Text style = {styles.text}>Confirm Password</Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Re-enter your Password"
-        placeholderTextColor="#FFF"
-        secureTextEntry={true}
-      />
-      <Pressable style = {styles.button} onPress={() => navigation.navigate('login')}>
-        <Text style = {styles.text}>Sign Up</Text>
-      </Pressable>
-      <Pressable onPress = {() => navigation.navigate('login')}>
-        <Text style = {styles.text}>Already have an account? Log In</Text>
-      </Pressable>
-    </View>
-    </LinearGradient>
+          colors={['#1A1A2E', '#16213E']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={styles.container}
+        >
+          <View style={styles.view}>
+            <Image 
+              source={require("../assets/images/slash-it-logo.png")}
+              style={styles.image}
+            />
+            <Text style={styles.text}>Username</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your username"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            />
+            <Text style={styles.text}>Password</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your Password"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              secureTextEntry
+            />
+            <Text style={styles.text}>Re-enter Password</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Re-Enter your Password"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              secureTextEntry
+            />
+            <Pressable style={styles.button} onPress={() => router.push('/login')}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </Pressable>
+            <Pressable onPress={() => router.push('/login')}>
+                <Text style= {styles.text}>Already have an account? Log In</Text>
+            </Pressable>
+          </View>
+        </LinearGradient>
     
   )
 }
@@ -60,39 +60,62 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
   view: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 15,
+    padding: 30,
+    width: '90%',
+    maxWidth: 400,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     marginBottom: 20,
-    resizeMode: 'cover'
+    resizeMode: 'contain',
   },
   text: {
-    color: "#FFF",
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 20,
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'left',
+    marginBottom: 8,
+    marginLeft: 10,
+    width: '100%',
+    marginTop: 15
   },
-  textInput : {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+  textInput: {
+    height: 48,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    color: '#FFFFFF',
+    fontSize: 16,
     marginBottom: 20,
-    paddingHorizontal: 10,
-    width: '80%',
-    textAlign: 'center',
-    borderRadius: 5
+    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   button: {
-    width: 200,
-    backgroundColor: "steelblue",
+    width: '100%',
+    backgroundColor: '#00D4FF',
+    paddingVertical: 14,
     borderRadius: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
     margin: 10
-  }
+  },
+  buttonText: {
+    color: '#1A1A2E',
+    fontSize: 18,
+    fontWeight: '600',
+  },
 });
