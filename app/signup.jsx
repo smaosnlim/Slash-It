@@ -1,55 +1,92 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-
-/*
-const handlePress = () => {
-  console.log("Welcome, Logged In");
-  navigation.navigate('home');
-}
-  */
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
+import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { auth } from '../backend/firebase';
 
 export default function SignUp() {
 
-  return (
-    <LinearGradient
-          colors={['#1A1A2E', '#16213E']}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={styles.container}
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleSignUp = async () => {
+        if (password !== confirmPassword) {
+            Alert.alert('Error', 'Passwords do not match');
+            return;
+        }
+
+        if (!email || !password) {
+            Alert.alert('Error', 'Email and password are required');
+            return;
+        }
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            Alert.alert("Success", "Account created successfully!");
+            router.push('/login');
+        } catch (error) {
+            console.error("Signup Error: ", error.code, error.message);
+            let errorMessage = 'Something went wrong';
+            if (error.code === 'auth/email-already-in-use') {
+                errorMessage = 'This email is already in use.';
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = 'The email address is not valid.';
+            } else if (error.code === 'auth/weak-password') {
+                errorMessage = 'The password is too weak.';
+            }
+            Alert.alert('Error', error.message || "Something went wrong");
+        }
+    }
+
+    return (
+        <LinearGradient
+            colors={['#1A1A2E', '#16213E']}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}
+            style={styles.container}
         >
-          <View style={styles.view}>
+        <View style={styles.view}>
             <Image 
-              source={require("../assets/images/slash-it-logo.png")}
-              style={styles.image}
+                source={require("../assets/images/slash-it-logo.png")}
+                style={styles.image}
             />
-            <Text style={styles.text}>Username</Text>
+            <Text style={styles.text}>Email</Text>
             <TextInput
-              style={styles.textInput}
-              placeholder="Enter your username"
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                style={styles.textInput}
+                placeholder="Enter your email"
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
             />
             <Text style={styles.text}>Password</Text>
             <TextInput
-              style={styles.textInput}
-              placeholder="Enter your Password"
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              secureTextEntry
+                style={styles.textInput}
+                placeholder="Enter your Password"
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
             />
             <Text style={styles.text}>Re-enter Password</Text>
             <TextInput
-              style={styles.textInput}
-              placeholder="Re-Enter your Password"
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              secureTextEntry
+                style={styles.textInput}
+                placeholder="Re-Enter your Password"
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
             />
-            <Pressable style={styles.button} onPress={() => router.push('/login')}>
-              <Text style={styles.buttonText}>Sign Up</Text>
+            <Pressable style={styles.button} onPress={handleSignUp}>
+                <Text style={styles.buttonText}>Sign Up</Text>
             </Pressable>
             <Pressable onPress={() => router.push('/login')}>
                 <Text style= {styles.text}>Already have an account? Log In</Text>
             </Pressable>
-          </View>
+        </View>
         </LinearGradient>
     
   )

@@ -1,8 +1,25 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
+import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { auth } from '../backend/firebase';
 
 export default function Login() {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert('Login Successful', 'Login Successful!');
+      router.push('/home');
+    } catch (error) {
+      Alert.alert('Error', error.message || "Something went wrong");
+    }
+  }
+
   return (
     <LinearGradient
       colors={['#1A1A2E', '#16213E']}
@@ -15,11 +32,15 @@ export default function Login() {
           source={require("../assets/images/slash-it-logo.png")}
           style={styles.image}
         />
-        <Text style={styles.text}>Username</Text>
+        <Text style={styles.text}>Email</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="Enter your username"
+          placeholder="Enter your email"
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
         />
         <Text style={styles.text}>Password</Text>
         <TextInput
@@ -27,8 +48,10 @@ export default function Login() {
           placeholder="Enter your Password"
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
-        <Pressable style={styles.button} onPress={() => router.push('/home')}>
+        <Pressable style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
         <Pressable onPress={() => router.push('/signup')}>

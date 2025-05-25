@@ -7,14 +7,20 @@ export default function Home() {
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.container}>
         <View style={styles.sidebar}>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/login')}>
-            <Text style={styles.sidebarButtonText}>Login</Text>
-          </Pressable>
           <Pressable style={styles.sidebarButton} onPress={() => router.push('/home')}>
             <Text style={styles.sidebarButtonText}>Home</Text>
           </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/settings')}>
-            <Text style={styles.sidebarButtonText}>Settings</Text>
+          <Pressable style={styles.sidebarButton} onPress={() => router.push('/expensetracker')}>
+            <Text style={styles.sidebarButtonText}>Expense Tracker</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => router.push('/deals')}>
+            <Text style={styles.sidebarButtonText}>Deals</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => router.push('/investments')}>
+            <Text style={styles.sidebarButtonText}>Investments</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => router.push('/bills')}>
+            <Text style={styles.sidebarButtonText}>Bills</Text>
           </Pressable>
         </View>
         <View style={styles.content}>
