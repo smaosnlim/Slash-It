@@ -1,3 +1,4 @@
+/*
 import { Redirect } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-/*
+*/
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -40,7 +41,7 @@ function MyDrawer() {
     return (
         <Drawer.Navigator>
             <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="ExpenseTracker" component={ExpenseTracker} />
+            <Drawer.Screen name="Expense Tracker" component={ExpenseTracker} />
             <Drawer.Screen name="Deals" component={Deals} />
             <Drawer.Screen name="Investments" component={Investments} />
             <Drawer.Screen name="Bills" component={Bills} />
@@ -57,4 +58,3 @@ export default function Navigation() {
     </Stack.Navigator>
   )
 }
-  */

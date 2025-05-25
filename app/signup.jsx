@@ -1,11 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { auth } from '../backend/firebase';
 
-export default function SignUp() {
+export default function SignUp({navigation}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,8 +24,9 @@ export default function SignUp() {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             Alert.alert("Success", "Account created successfully!");
-            router.push('/login');
-        } catch (error) {
+            //router.push('/login');
+            navigation.navigate('login');
+          } catch (error) {
             console.error("Signup Error: ", error.code, error.message);
             let errorMessage = 'Something went wrong';
             if (error.code === 'auth/email-already-in-use') {
@@ -83,7 +83,7 @@ export default function SignUp() {
             <Pressable style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </Pressable>
-            <Pressable onPress={() => router.push('/login')}>
+            <Pressable onPress={() => navigation.navigate('login')}>
                 <Text style= {styles.text}>Already have an account? Log In</Text>
             </Pressable>
         </View>
