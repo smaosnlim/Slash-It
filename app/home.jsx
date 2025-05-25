@@ -1,9 +1,22 @@
 import { router } from 'expo-router';
+import { signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { auth } from '../backend/firebase';
 
 export default function Home() {
-  return (
+
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            router.replace('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    }
+
+    return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.container}>
         <View style={styles.sidebar}>
@@ -26,8 +39,8 @@ export default function Home() {
         <View style={styles.content}>
           <View style={styles.card}>
             <Text style={styles.title}>Welcome Home</Text>
-            <Pressable style={styles.button} onPress={() => router.back()}>
-              <Text style={styles.buttonText}>Go Back</Text>
+            <Pressable style={styles.button} onPress={handleLogout}>
+              <Text style={styles.buttonText}>Log Out</Text>
             </Pressable>
           </View>
         </View>

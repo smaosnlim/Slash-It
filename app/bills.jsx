@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,8 +8,8 @@ export default function Bills({navigation}) {
             {/*<Header />*/}
             <View style = {styles.container}>
                 <Text> Track your upcoming bills and manage them!</Text>
-                <Pressable style = {styles.button} onPress = {() => navigation.goBack()}>
-                    <Text>Go Back</Text>
+                <Pressable style = {styles.button} onPress = {() => router.push('/home')}>
+                    <Text>Home</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
