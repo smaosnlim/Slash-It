@@ -1,13 +1,12 @@
-
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Home({navigation}) {
+export default function Deals({navigation}) {
     return (
         <SafeAreaView style = {styles.outerContainer}>
             {/*<Header />*/}
             <View style = {styles.container}>
-                <Text> Welcome Home </Text>
+                <Text> Check out the latest deals for you!</Text>
                 <Pressable style = {styles.button} onPress = {() => navigation.goBack()}>
                     <Text>Go Back</Text>
                 </Pressable>

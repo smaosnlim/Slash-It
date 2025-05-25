@@ -34,9 +34,14 @@ export default function Login({navigation}) {
         style={styles.textInput}
         placeholder="Enter your Password"
         placeholderTextColor="#FFF"
+        secureTextEntry={true}
+
       />
       <Pressable style = {styles.button} onPress={() => navigation.navigate('home')}>
         <Text style = {styles.text}>Log In</Text>
+      </Pressable>
+      <Pressable onPress = {() => navigation.navigate('signup')}>
+        <Text style = {styles.text}>Don't have an account? Sign Up</Text>
       </Pressable>
     </View>
     </LinearGradient>
