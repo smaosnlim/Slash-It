@@ -1,3 +1,23 @@
+import { Redirect } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+
+export default function Index() {
+  return (
+    <View style={styles.container}>
+      <Redirect href="/login" />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1A1A2E',
+  },
+});
+
+/*
+
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -37,3 +57,4 @@ export default function Navigation() {
     </Stack.Navigator>
   )
 }
+  */
