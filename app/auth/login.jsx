@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { auth } from '../backend/firebase';
+import { auth } from '../../backend/firebase';
 
 export default function Login({navigation}) {
 
@@ -29,7 +29,7 @@ export default function Login({navigation}) {
     >
       <View style={styles.view}>
         <Image 
-          source={require("../assets/images/slash-it-logo.png")}
+          source={require("../../assets/images/slash-it-logo.png")}
           style={styles.image}
         />
         <Text style={styles.text}>Email</Text>

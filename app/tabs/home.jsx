@@ -1,7 +1,7 @@
 import { signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { auth } from '../backend/firebase';
+import { auth } from '../../backend/firebase';
 
 export default function Home({navigation}) {
 

@@ -19,16 +19,19 @@ const styles = StyleSheet.create({
 
 */
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Bills from './bills.jsx';
-import Deals from './deals.jsx';
-import ExpenseTracker from './expensetracker.jsx';
-import Home from './home.jsx';
-import Investments from './investments.jsx';
-import Login from './login.jsx';
-import SignUp from './signup.jsx';
+import Login from './auth/login.jsx';
+import SignUp from './auth/signup.jsx';
+import Bills from './features/bills.jsx';
+import Deals from './features/deals.jsx';
+import ExpenseTracker from './features/expensetracker.jsx';
+import Investments from './features/investments.jsx';
+import Account from './tabs/account.jsx';
+import Home from './tabs/home.jsx';
+import Settings from './tabs/settings.jsx';
 
 const handlePress = () => {
   console.log("Welcome, Logged In");
@@ -36,11 +39,24 @@ const handlePress = () => {
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
+  return (
+    <Tab.Navigator screenOptions={{headerShown: false}}>
+      <Tab.Screen name = "Home" component = {Home} />
+      <Tab.Screen name = "Settings" component = {Settings} />
+      <Tab.Screen name = "Account" component = {Account} />
+    </Tab.Navigator>
+
+  )
+}
+
 
 function MyDrawer() {
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Home" component={MyTabs} />
             <Drawer.Screen name="Expense Tracker" component={ExpenseTracker} />
             <Drawer.Screen name="Deals" component={Deals} />
             <Drawer.Screen name="Investments" component={Investments} />
