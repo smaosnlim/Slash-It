@@ -31,8 +31,11 @@ const Tab = createBottomTabNavigator();
 // Custom Drawer Content
 function CustomDrawerContent(props) {
   return (
-    <DrawerContentScrollView {...props}>
-      <View style={styles.drawerContainer}>
+    <DrawerContentScrollView
+      {...props}
+      style={{ backgroundColor: mainThemeColor }} // Set background for the scroll view
+    >
+      <View style={[styles.drawerContainer, { backgroundColor: mainThemeColor }]}>
         {props.state.routes.map((route, index) => {
           const isFocused = props.state.index === index;
           const onPress = () => {
@@ -96,6 +99,7 @@ function CustomDrawerContent(props) {
 const styles = StyleSheet.create({
   drawerContainer: {
     padding: 10,
+    flex: 1, // Ensure the container takes up the full height
   },
   drawerItem: {
     backgroundColor: drawerItemBgColor, // Box background with 80% opacity theme color
@@ -130,6 +134,8 @@ function MyTabs() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: mainThemeColor, // Navy blue (no opacity)
+          height: 60, // Match header height for consistency
+          paddingBottom: 5, // Adjust padding to center icons/text
         },
         tabBarIcon: ({ color, size }) => {
           let iconName;
@@ -146,6 +152,10 @@ function MyTabs() {
         },
         tabBarActiveTintColor: '#fff', // White for active tab to match drawer text
         tabBarInactiveTintColor: '#ccc', // Light gray for inactive tab
+        tabBarLabelStyle: {
+          fontSize: 12, // Adjust font size to match header title
+          fontWeight: 'bold', // Match header title weight
+        },
       })}
     >
       <Tab.Screen name="Home" component={Home} />
@@ -166,6 +176,15 @@ function MyDrawer() {
         },
         drawerActiveTintColor: '#fff', // White text for active item
         drawerInactiveTintColor: '#fff', // White text for inactive items
+        headerStyle: {
+          backgroundColor: mainThemeColor, // Match tab bar background
+          height: 60, // Match tab bar height
+        },
+        headerTintColor: '#fff', // White text to match active tab
+        headerTitleStyle: {
+          fontSize: 16, // Match drawer item text size
+          fontWeight: 'bold', // Match active tab label
+        },
       }}
     >
       <Drawer.Screen name="Home" component={MyTabs} />
@@ -178,7 +197,7 @@ function MyDrawer() {
   );
 }
 
-export default function Navigation() {
+function Navigation() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -194,3 +213,5 @@ export default function Navigation() {
     </Stack.Navigator>
   );
 }
+
+export default Navigation;

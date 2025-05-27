@@ -1,11 +1,11 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput } from 'react-native';
+import * as Animatable from 'react-native-animatable'; // Import animatable
 import { auth } from '../../backend/firebase';
 
-export default function Login({navigation}) {
-
+export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,12 +13,11 @@ export default function Login({navigation}) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Successful', 'Login Successful!');
-      //router.push('/home');
       navigation.navigate('home');
     } catch (error) {
-      Alert.alert('Error', error.message || "Something went wrong");
+      Alert.alert('Error', error.message || 'Something went wrong');
     }
-  }
+  };
 
   return (
     <LinearGradient
@@ -27,9 +26,15 @@ export default function Login({navigation}) {
       end={{ x: 0.5, y: 1 }}
       style={styles.container}
     >
-      <View style={styles.view}>
-        <Image 
-          source={require("../../assets/images/slash-it-logo.png")}
+      <Animatable.View
+        animation="fadeInUp" // Subtle fade-in from bottom
+        duration={1000} // 1 second duration
+        style={styles.view}
+      >
+        <Animatable.Image
+          animation="zoomIn" // Slight zoom-in for logo
+          duration={800}
+          source={require('../../assets/images/slash-it-logo.png')}
           style={styles.image}
         />
         <Text style={styles.text}>Email</Text>
@@ -51,13 +56,20 @@ export default function Login({navigation}) {
           value={password}
           onChangeText={setPassword}
         />
-        <Pressable style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Log In</Text>
-        </Pressable>
+        <Animatable.View
+          animation="pulse" // Subtle pulse effect on button
+          duration={1000}
+          iterationCount={1} // Run once
+          style={styles.button}
+        >
+          <Pressable onPress={handleLogin}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </Pressable>
+        </Animatable.View>
         <Pressable onPress={() => navigation.navigate('signup')}>
-          <Text style= {styles.text}>Don't have an account? Sign Up</Text>
+          <Text style={styles.text}>Don't have an account? Sign Up</Text>
         </Pressable>
-      </View>
+      </Animatable.View>
     </LinearGradient>
   );
 }
@@ -83,8 +95,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
     marginBottom: 20,
     resizeMode: 'contain',
   },
@@ -96,7 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 10,
     width: '100%',
-    marginTop: 15
+    marginTop: 15,
   },
   textInput: {
     height: 48,
@@ -118,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
-    margin: 10
+    margin: 10,
   },
   buttonText: {
     color: '#1A1A2E',
