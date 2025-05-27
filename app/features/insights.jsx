@@ -5,11 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Insights({ navigation, route }) {
   const [expenseList, setExpenseList] = useState([]);
+  const [grokPrompt, setGrokPrompt] = useState([]);
 
   useEffect(() => {
     if (route.params?.expenseList) {
       console.log('Received expense list:', route.params.expenseList);
       setExpenseList(route.params.expenseList);
+    }
+    if (route.params?.grokPrompt) {
+      console.log("Received Prompt");
+      setGrokPrompt(route.params.grokPrompt);
     }
   }, [route.params?.expenseList]);
 
@@ -33,6 +38,7 @@ export default function Insights({ navigation, route }) {
     <View style={styles.expenseItem}>
       <Text style={styles.expenseText}>{item}</Text>
     </View>
+    
   );
 
   return (
@@ -50,6 +56,9 @@ export default function Insights({ navigation, route }) {
           ) : (
             <Text style={styles.emptyText}>No expenses received.</Text>
           )}
+        </View>
+        <View>
+          <Text style = {styles.expenseText}>{grokPrompt}</Text>
         </View>
         <Pressable
           style={styles.backButton}

@@ -3,6 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from "axios";
 
 export default function ExpenseTracker({ navigation }) {
   const [expenses, setExpenses] = useState([]);
@@ -42,15 +43,45 @@ export default function ExpenseTracker({ navigation }) {
     setExpenses(expenses.filter((expense) => expense.id !== id));
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     try {
       const expenseList = expenses.map(
         (expense) => `${expense.name},${expense.category},$${expense.amount}`
       );
-      console.log('Formatted expense list:', expenseList);
+      /*console.log('Formatted expense list:', expenseList);
       console.log('Navigation prop:', navigation);
       console.log('Attempting to navigate to "Insights"');
-      navigation.navigate('Insights', { expenseList });
+      */
+      if (expenseList.length === 0) {
+        console.log("Please add at least 1 expense")
+        return;
+      }
+
+      const grokPrompt = `Analyse this expense list and provide insights: ${JSON.stringify(expenseList)}`;
+
+      /*
+      try {
+        const response = await axios.post(
+          'https://api.x.ai/v1/grok', // Replace with actual Grok API endpoint
+        {
+          prompt: grokPrompt,
+          model: 'grok-3', // Specify the model if required
+        },
+        {
+          headers: {
+            'Authorization': `Bearer xai-9TVFanFIHiOL7WjbeflktPVRKOt3eWrPgw7vIcmBFH9YFsiaMg3jSEiXZv0OGYoacQPps8vWTc0xApRo`, // Replace with your API key
+            'Content-Type': 'application/json',
+          },
+        }
+        );
+        const insights = response.data.choices[0].text || "No insights generated";
+        navigation.navigate("Insights", {insights});
+      } catch (error) {
+        console.error("error calling grok API:", error);
+      }
+        */
+
+      navigation.navigate('Insights', { expenseList, grokPrompt });
     } catch (error) {
       console.error('Navigation error:', error);
       if (navigation.canGoBack()) {
