@@ -71,7 +71,7 @@ export default function ExpenseTracker({ navigation }) {
           headers: {
             'Authorization': `Bearer xai-9TVFanFIHiOL7WjbeflktPVRKOt3eWrPgw7vIcmBFH9YFsiaMg3jSEiXZv0OGYoacQPps8vWTc0xApRo`, // Replace with your API key
             'Content-Type': 'application/json',
-          },
+          },g
         }
         );
         const insights = response.data.choices[0].text || "No insights generated";
