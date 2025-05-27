@@ -1,16 +1,15 @@
-import { router } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { auth } from '../backend/firebase';
+import { auth } from '../../backend/firebase';
 
-export default function Home() {
-
+export default function Home({navigation}) {
 
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            router.replace('/login');
+            //router.replace('/login');
+            navigation.navigate('login');
         } catch (error) {
             console.error('Logout failed:', error);
         }
@@ -19,23 +18,6 @@ export default function Home() {
     return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.container}>
-        <View style={styles.sidebar}>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/home')}>
-            <Text style={styles.sidebarButtonText}>Home</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/expensetracker')}>
-            <Text style={styles.sidebarButtonText}>Expense Tracker</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/deals')}>
-            <Text style={styles.sidebarButtonText}>Deals</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/investments')}>
-            <Text style={styles.sidebarButtonText}>Investments</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => router.push('/bills')}>
-            <Text style={styles.sidebarButtonText}>Bills</Text>
-          </Pressable>
-        </View>
         <View style={styles.content}>
           <View style={styles.card}>
             <Text style={styles.title}>Welcome Home</Text>
@@ -119,3 +101,23 @@ const styles = StyleSheet.create({
     color: '#1A1A2E',
   },
 });
+
+/*
+<View style={styles.sidebar}>
+          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('home')}>
+            <Text style={styles.sidebarButtonText}>Home</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('expensetracker')}>
+            <Text style={styles.sidebarButtonText}>Expense Tracker</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('deals')}>
+            <Text style={styles.sidebarButtonText}>Deals</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('investments')}>
+            <Text style={styles.sidebarButtonText}>Investments</Text>
+          </Pressable>
+          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('bills')}>
+            <Text style={styles.sidebarButtonText}>Bills</Text>
+          </Pressable>
+        </View>
+*/

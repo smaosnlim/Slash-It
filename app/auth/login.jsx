@@ -1,11 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { auth } from '../backend/firebase';
+import { auth } from '../../backend/firebase';
 
-export default function Login() {
+export default function Login({navigation}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +13,8 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Successful', 'Login Successful!');
-      router.push('/home');
+      //router.push('/home');
+      navigation.navigate('home');
     } catch (error) {
       Alert.alert('Error', error.message || "Something went wrong");
     }
@@ -29,7 +29,7 @@ export default function Login() {
     >
       <View style={styles.view}>
         <Image 
-          source={require("../assets/images/slash-it-logo.png")}
+          source={require("../../assets/images/slash-it-logo.png")}
           style={styles.image}
         />
         <Text style={styles.text}>Email</Text>
@@ -54,7 +54,7 @@ export default function Login() {
         <Pressable style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
-        <Pressable onPress={() => router.push('/signup')}>
+        <Pressable onPress={() => navigation.navigate('signup')}>
           <Text style= {styles.text}>Don't have an account? Sign Up</Text>
         </Pressable>
       </View>

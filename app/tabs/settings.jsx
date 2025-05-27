@@ -1,16 +1,15 @@
-import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function ExpenseTracker({navigation}) {
+export default function Settings({navigation}) {
     return (
         <SafeAreaView style = {styles.outerContainer}>
             {/*<Header />*/}
             <View style = {styles.container}>
-                <Text> Find out how you have spent your money!</Text>
-               <Pressable style = {styles.button} onPress = {() => router.push('/home')}>
+                <Text> See your settings here</Text>
+                <Pressable style = {styles.button} onPress = {() => navigation.navigate('Home')}>
                     <Text>Home</Text>
-               </Pressable>
+                </Pressable>
             </View>
         </SafeAreaView>
     )
