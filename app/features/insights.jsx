@@ -5,18 +5,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Insights({ navigation, route }) {
   const [expenseList, setExpenseList] = useState([]);
-  const [grokPrompt, setGrokPrompt] = useState([]);
+  const [output, setOutput] = useState([]);
 
   useEffect(() => {
     if (route.params?.expenseList) {
       console.log('Received expense list:', route.params.expenseList);
       setExpenseList(route.params.expenseList);
     }
-    if (route.params?.grokPrompt) {
+    if (route.params?.output) {
       console.log("Received Prompt");
-      setGrokPrompt(route.params.grokPrompt);
+      setOutput(route.params.output.content);
     }
-  }, [route.params?.expenseList]);
+  }, [route.params?.expenseList, route.params?.output]);
 
   const handleBack = () => {
     try {
@@ -58,7 +58,7 @@ export default function Insights({ navigation, route }) {
           )}
         </View>
         <View>
-          <Text style = {styles.expenseText}>{grokPrompt}</Text>
+          <Text style = {styles.expenseText}>{output}</Text>
         </View>
         <Pressable
           style={styles.backButton}

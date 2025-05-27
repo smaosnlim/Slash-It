@@ -1,9 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import OpenAI from 'openai';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import axios from "axios";
 
 export default function ExpenseTracker({ navigation }) {
   const [expenses, setExpenses] = useState([]);
@@ -44,7 +44,6 @@ export default function ExpenseTracker({ navigation }) {
   };
 
   const handleConfirm = async () => {
-    try {
       const expenseList = expenses.map(
         (expense) => `${expense.name},${expense.category},$${expense.amount}`
       );
@@ -59,29 +58,42 @@ export default function ExpenseTracker({ navigation }) {
 
       const grokPrompt = `Analyse this expense list and provide insights: ${JSON.stringify(expenseList)}`;
 
-      /*
+   
       try {
-        const response = await axios.post(
-          'https://api.x.ai/v1/grok', // Replace with actual Grok API endpoint
-        {
-          prompt: grokPrompt,
-          model: 'grok-3', // Specify the model if required
-        },
-        {
-          headers: {
-            'Authorization': `Bearer xai-9TVFanFIHiOL7WjbeflktPVRKOt3eWrPgw7vIcmBFH9YFsiaMg3jSEiXZv0OGYoacQPps8vWTc0xApRo`, // Replace with your API key
-            'Content-Type': 'application/json',
-          },g
-        }
-        );
-        const insights = response.data.choices[0].text || "No insights generated";
-        navigation.navigate("Insights", {insights});
-      } catch (error) {
-        console.error("error calling grok API:", error);
-      }
-        */
+      const client = new OpenAI({
+        apiKey: MY_API_KEY, // Replace with your actual OpenAI API key
+        baseURL: 'https://api.x.ai/v1',
+      });
 
-      navigation.navigate('Insights', { expenseList, grokPrompt });
+      const completion = await client.chat.completions.create({
+        model: 'grok-3-latest',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful assistant that provides insights on expenses.',
+          },
+          {
+            role: 'user',
+            content: grokPrompt,
+          },
+        ],
+      });
+      const output = completion.choices[0].message;
+      navigation.navigate('Insights', {
+        expenseList,
+        output
+      });
+
+    /*
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const insights = data.choices?.[0]?.text || 'No insights generated';
+    
+    navigation.navigate('Insights', { expenseList, insights });
+    */
     } catch (error) {
       console.error('Navigation error:', error);
       if (navigation.canGoBack()) {
