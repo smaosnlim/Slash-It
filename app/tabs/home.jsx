@@ -101,23 +101,3 @@ const styles = StyleSheet.create({
     color: '#1A1A2E',
   },
 });
-
-/*
-<View style={styles.sidebar}>
-          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('home')}>
-            <Text style={styles.sidebarButtonText}>Home</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('expensetracker')}>
-            <Text style={styles.sidebarButtonText}>Expense Tracker</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('deals')}>
-            <Text style={styles.sidebarButtonText}>Deals</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('investments')}>
-            <Text style={styles.sidebarButtonText}>Investments</Text>
-          </Pressable>
-          <Pressable style={styles.sidebarButton} onPress={() => navigation.navigate('bills')}>
-            <Text style={styles.sidebarButtonText}>Bills</Text>
-          </Pressable>
-        </View>
-*/
