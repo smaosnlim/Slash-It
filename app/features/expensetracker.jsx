@@ -180,7 +180,7 @@ export default function ExpenseTracker({ navigation }) {
                   setShowPicker(false);
                 }}
                 style={styles.picker}
-                dropdownIconColor="transparent"
+                dropdownIconColor="#00D4FF"
               >
                 <Picker.Item
                   label="Select a category"
@@ -204,6 +204,7 @@ export default function ExpenseTracker({ navigation }) {
               value={amount}
               onChangeText={(text) => setAmount(text.replace(/[^0-9.]/g, ''))}
               keyboardType="numeric"
+              returnKeyType='done'
             />
             <Pressable style={styles.addButton} onPress={addExpense}>
               <MaterialIcons name="add" size={24} color="#1A1A2E" />
@@ -301,12 +302,14 @@ const styles = StyleSheet.create({
   picker: {
     width: '100%',
     color: '#FFFFFF',
-    backgroundColor: '#1A1A2E',
+    //backgroundColor: '#1A1A2E',
+    backgroundColor: 'transparent',
     marginBottom: 15,
   },
   pickerItem: {
     color: '#FFFFFF',
-    backgroundColor: '#1A1A2E',
+    //backgroundColor: '#1A1A2E',
+    backgroundColor: "#FFFFFF", //changed options to white for visibility
     fontSize: 16,
   },
   addButton: {

@@ -15,13 +15,14 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
+    <SafeAreaView style={styles.outerContainer} >
       <LinearGradient
         colors={['#1A1A2E', '#16213E']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         style={styles.gradient}
-      >
+        >
+      
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>Welcome Home</Text>
@@ -66,17 +67,22 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
+    backgroundColor: '#1A1A2E',
+    border: '2px solid rgba(255, 255, 255, 0.1)',
   },
   gradient: {
     flex: 1,
+    //backgroundColor: 'rgb(26, 26, 46)'
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 100, // Add padding to control top spacing
+    paddingBottom: 150, // Add padding to control bottom spacing
   },
   header: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
   title: {
     fontSize: 28,
@@ -85,9 +91,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    //backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: 'rgb(26, 26, 46)',
     borderRadius: 15,
-    padding: 30,
+    padding: 20,
+    marginBottom: 20,
     width: '90%',
     maxWidth: 400,
     alignItems: 'center',
@@ -96,8 +104,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    marginBottom: 20,
+    borderColor: "#FFFFFF",
   },
   sectionPlaceholder: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     width: '100%',
-    height: 100,
+    height: 100
   },
   sectionText: {
     color: '#FFFFFF',
@@ -128,6 +135,7 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     flexWrap: 'wrap',
     paddingHorizontal: 10,
+    margin: 10
   },
   button: {
     width: 160, // Increased width to fit "Expense Tracker"

@@ -20,10 +20,6 @@ import Settings from './tabs/settings.jsx';
 const mainThemeColor = '#1a1a2e'; // Navy blue as specified
 const drawerItemBgColor = tinycolor(mainThemeColor).setAlpha(0.8).toRgbString(); // 80% opacity for drawer item boxes
 
-const handlePress = () => {
-  console.log("Welcome, Logged In");
-};
-
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,46 +92,16 @@ function CustomDrawerContent(props) {
   );
 }
 
-const styles = StyleSheet.create({
-  drawerContainer: {
-    padding: 10,
-    flex: 1, // Ensure the container takes up the full height
-  },
-  drawerItem: {
-    backgroundColor: drawerItemBgColor, // Box background with 80% opacity theme color
-    borderRadius: 10, // Rounded corners
-    marginVertical: 5,
-    padding: 10,
-  },
-  drawerItemActive: {
-    backgroundColor: mainThemeColor, // Full opacity for active item
-  },
-  drawerItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  drawerItemIcon: {
-    marginRight: 10, // Space between icon and text
-  },
-  drawerItemText: {
-    color: '#fff', // White text for inactive items
-    fontSize: 16,
-  },
-  drawerItemTextActive: {
-    color: '#fff', // White text for active items
-    fontWeight: 'bold',
-  },
-});
-
 function MyTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
+          position: 'absolute', // Position the tab bar at the bottom
           backgroundColor: mainThemeColor, // Navy blue (no opacity)
-          height: 60, // Match header height for consistency
-          paddingBottom: 5, // Adjust padding to center icons/text
+          height: 60, // Match header height for consistency",
+          borderTopWidth: 1, // Remove top border
         },
         tabBarIcon: ({ color, size }) => {
           let iconName;
@@ -173,12 +139,13 @@ function MyDrawer() {
         drawerStyle: {
           backgroundColor: mainThemeColor, // Navy blue (no opacity)
           width: 250,
+          
         },
         drawerActiveTintColor: '#fff', // White text for active item
         drawerInactiveTintColor: '#fff', // White text for inactive items
         headerStyle: {
           backgroundColor: mainThemeColor, // Match tab bar background
-          height: 60, // Match tab bar height
+          height: 0, // Match tab bar height
         },
         headerTintColor: '#fff', // White text to match active tab
         headerTitleStyle: {
@@ -204,6 +171,8 @@ function Navigation() {
         headerShown: false,
         cardStyle: {
           backgroundColor: mainThemeColor, // Navy blue (no opacity)
+          flex: 1, // Ensure the stack fills the screen
+          
         },
       }}
     >
@@ -215,3 +184,34 @@ function Navigation() {
 }
 
 export default Navigation;
+
+const styles = StyleSheet.create({
+  drawerContainer: {
+    padding: 10,
+    flex: 1, // Ensure the container takes up the full height
+  },
+  drawerItem: {
+    backgroundColor: drawerItemBgColor, // Box background with 80% opacity theme color
+    borderRadius: 10, // Rounded corners
+    marginVertical: 5,
+    padding: 10,
+  },
+  drawerItemActive: {
+    backgroundColor: mainThemeColor, // Full opacity for active item
+  },
+  drawerItemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  drawerItemIcon: {
+    marginRight: 10, // Space between icon and text
+  },
+  drawerItemText: {
+    color: '#fff', // White text for inactive items
+    fontSize: 16,
+  },
+  drawerItemTextActive: {
+    color: '#fff', // White text for active items
+    fontWeight: 'bold',
+  },
+});
