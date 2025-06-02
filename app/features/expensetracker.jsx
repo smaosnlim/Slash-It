@@ -4,6 +4,11 @@ import OpenAI from 'openai';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getFunctions, httpsCallable } from "firebase/functions";
+import { app } from "../../backend/firebase";
+import * as functions from "firebase-functions";
+
+const xai = require("xai")(functions.config().xai.api_key);
 
 export default function ExpenseTracker({ navigation }) {
   const [expenses, setExpenses] = useState([]);
@@ -59,6 +64,7 @@ export default function ExpenseTracker({ navigation }) {
       const grokPrompt = `Analyse this expense list and provide insights: ${JSON.stringify(expenseList)}`;
 
    
+      
       try {
       const client = new OpenAI({
         apiKey: MY_API_KEY, // Replace with your actual OpenAI API key
@@ -79,6 +85,21 @@ export default function ExpenseTracker({ navigation }) {
         ],
       });
       const output = completion.choices[0].message;
+      
+     
+      // Using Firebase cloud functions
+    /*
+      try {
+      
+      
+      const functions = getFunctions(app);
+      const getInsights = httpsCallable(functions, 'getInsights');
+      const result = await getInsights({expenses : expenseList})
+      const output = result.data;
+      */
+      
+     //const output = "hello"
+
       navigation.navigate('Insights', {
         expenseList,
         output

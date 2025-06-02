@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Bills({navigation}) {
     return (
         <SafeAreaView style = {styles.outerContainer}>
-            {/*<Header />*/}
             <View style = {styles.container}>
                 <Text> Track your upcoming bills and manage them!</Text>
                 <Pressable style = {styles.button} onPress = {() => navigation.navigate('Home')}>

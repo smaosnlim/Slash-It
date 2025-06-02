@@ -1,7 +1,38 @@
+const {logger} = require("firebase-functions");
+const {onRequest} = require("firebase-functions/v2/https");
+const {onDocumentCreated} = require("firebase-functions/v2/firestore");
+import {onCall} from "firebase-functions/v2/https";
+
+const {initializeApp} = require("firebase-admin/app");
+const {getFirestore} = require("firebase-admin/firestore");
+
+initializeApp();
+
+export const getInsights = onCall({
+  secrets: ["XAI_API_KEY"],
+  }, async () => {
+    const secretKey = process.env.SECRET_API_KEY;
+    logger.info("Hello logs!", {structuredData: true});
+    return {"secret key": secretKey};
+  }
+)
+
+/*
+exports.getInsights = onRequest(async (req, res) => {
+    const original = req.query.text;
+    const writeResult = await getFirestore()
+      .collection("messages")
+      .add({original: original});
+
+    res.json({result: `Message with ID: ${writeResult.id} added.`});
+})
+*/
+
+/*
 import functions from 'firebase-functions';
 import fetch from 'node-fetch';
 
-const API_KEY = xai-CISpdbuNRBfzspZWG48Iv2VmGdBQ7SONl5uYgtsMnqiVomr0rnOMdr5UHnA05YoJeno6qYobI7bXu4S4;
+const API_KEY = functions.config().xai.api_key;
 
 export const getInsights = functions.https.onCall(async (data, context) => {
     try {
@@ -57,3 +88,4 @@ export const getInsights = functions.https.onCall(async (data, context) => {
       throw new functions.https.HttpsError('internal', `Failed to generate insights: ${error.message}`);
     }
   });
+  */

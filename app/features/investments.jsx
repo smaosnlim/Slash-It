@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Investments({navigation}) {
     return (
         <SafeAreaView style = {styles.outerContainer}>
-            {/*<Header />*/}
             <View style = {styles.container}>
                 <Text> See how you can grow your wealth!</Text>
                 <Pressable style = {styles.button} onPress = {() => navigation.navigate('Home')}>
