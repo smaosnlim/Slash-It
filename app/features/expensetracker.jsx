@@ -1,14 +1,18 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import OpenAI from 'openai';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { app } from "../../backend/firebase";
-import * as functions from "firebase-functions";
+//import { getInsights } from '../../backend/generateInsights';
 
-const xai = require("xai")(functions.config().xai.api_key);
+import { getFunctions, httpsCallable } from 'firebase/functions';
+
+//const isDev = process.env.NODE_ENV === 'development';
+//const functions = getFunctions(undefined, isDev ? "http://127.0.0.1:5001" : undefined );
+const functions = getFunctions();
+const getInsights = httpsCallable(functions, 'getInsights');
+
+//const xai = require("xai")(functions.config().xai.api_key);
 
 export default function ExpenseTracker({ navigation }) {
   const [expenses, setExpenses] = useState([]);
@@ -61,10 +65,18 @@ export default function ExpenseTracker({ navigation }) {
         return;
       }
 
-      const grokPrompt = `Analyse this expense list and provide insights: ${JSON.stringify(expenseList)}`;
+      const grokPrompt = `
+        Analyze the following monthly expenses and provide insights in JSON format with:
+        - total: Total spending
+        - breakdown: Object with category names as keys and total amounts as values
+        - tips: Array of 2-3 actionable spending tips
+        Expenses (format: description,category,$amount):
+        ${expenseList}
+        Return JSON only.
+      `;
 
    
-      
+      /*
       try {
       const client = new OpenAI({
         apiKey: MY_API_KEY, // Replace with your actual OpenAI API key
@@ -85,24 +97,21 @@ export default function ExpenseTracker({ navigation }) {
         ],
       });
       const output = completion.choices[0].message;
-      
-     
-      // Using Firebase cloud functions
-    /*
-      try {
-      
-      
-      const functions = getFunctions(app);
-      const getInsights = httpsCallable(functions, 'getInsights');
-      const result = await getInsights({expenses : expenseList})
-      const output = result.data;
       */
+      
+      
+      try {
+        const results = await getInsights({grokPrompt});
+        console.log('Insights generated:', results.data);
+        //const output = results.data;
+        
+      
       
      //const output = "hello"
 
       navigation.navigate('Insights', {
         expenseList,
-        output
+        output: results.data
       });
 
     /*
