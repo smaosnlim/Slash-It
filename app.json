@@ -38,6 +38,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "expo": {
+      "extra": {
+        "XAI_API_KEY": "${EXPO_XAI_API_KEY}"
+      }
     }
   }
 }

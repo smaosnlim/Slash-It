@@ -1,9 +1,12 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import Constants from 'expo-constants';
 import OpenAI from 'openai';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const apiKey = Constants.expoConfig.extra.XAI_API_KEY;
 
 export default function ExpenseTracker({ navigation }) {
   const [expenses, setExpenses] = useState([]);
@@ -61,7 +64,7 @@ export default function ExpenseTracker({ navigation }) {
    
       try {
       const client = new OpenAI({
-        apiKey: MY_API_KEY, // Replace with your actual OpenAI API key
+        apiKey: process.env.EXPO_PUBLIC_XAI_API_KEY, // Replace with your actual OpenAI API key
         baseURL: 'https://api.x.ai/v1',
       });
 
