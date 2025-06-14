@@ -37,11 +37,11 @@ export default function Bills({navigation}) {
                 }}
                 style = {styles.calendar}
             />
-            {events[selectedDate]?.map((event, index) => {
-                <View key={index}>
+            {events[selectedDate]?.map((event, index) => (
+                <View  style = {styles.event} key={index}>
                     <Text>{event.name} at {event.time}</Text>
                 </View>
-            })}
+            ))}
             <Text style = {styles.text}>Add New Event</Text>
             <TextInput
                 style = {styles.textInput}
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1A1A2E'
     },
     event: {
+        color: "white",
         padding: 10,
         backgroundColor: "#f0f0f0",
         margin: 10
