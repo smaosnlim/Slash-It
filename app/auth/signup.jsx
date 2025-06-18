@@ -1,14 +1,17 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { auth } from '../../backend/firebase';
+import { Alert, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { auth, db } from '../../backend/firebase';
 
 export default function SignUp({navigation}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [age, setAge] = useState('');
+    const [occupation, setOccupation] = useState('');
+    const [interests, setInterests] = useState('');
 
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
@@ -22,7 +25,18 @@ export default function SignUp({navigation}) {
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+            
+            const user = userCredentials.user;
+
+            await db.collection('users').doc(user.uid).set({
+                email: email,
+                age: age,
+                occupation: occupation,
+                interests: interests.split(',').map(interest => interest.trim()), // Split interests by comma and trim whitespace
+                //createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+            
             Alert.alert("Success", "Account created successfully!");
             //router.push('/login');
             navigation.navigate('login');
@@ -47,7 +61,8 @@ export default function SignUp({navigation}) {
             end={{ x: 0.5, y: 1 }}
             style={styles.container}
         >
-        <View style={styles.view}>
+        <SafeAreaView style={styles.view}>
+        <ScrollView>
             <Image 
                 source={require("../../assets/images/slash-it-logo.png")}
                 style={styles.image}
@@ -80,13 +95,39 @@ export default function SignUp({navigation}) {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
             />
+            <Text style={styles.text}>Age</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your age"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              value={age}
+              onChangeText={setAge}
+              keyboardType="numeric"
+            />
+            <Text style={styles.text}>Occupation</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your occupation"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              value={occupation}
+              onChangeText={setOccupation}
+            />
+            <Text style={styles.text}>Interests (comma-separated)</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="E.g., reading, gaming, hiking"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              value={interests}
+              onChangeText={setInterests}
+            />
             <Pressable style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </Pressable>
             <Pressable onPress={() => navigation.navigate('login')}>
                 <Text style= {styles.text}>Already have an account? Log In</Text>
             </Pressable>
-        </View>
+        </ScrollView>
+        </SafeAreaView>
         </LinearGradient>
     
   )

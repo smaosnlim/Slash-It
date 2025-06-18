@@ -8,6 +8,8 @@ import { Platform } from "react-native";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+//import '@react-native-firebase/firestore';
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -27,6 +29,7 @@ const auth = initializeAuth(app, {
 });
 //const analytics = getAnalytics(app);
 const db = getFirestore(app);
+//const firestore = firebase.firestore();
 
 export { app, auth, db };
 

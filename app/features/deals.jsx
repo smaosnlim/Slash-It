@@ -2,6 +2,22 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+// const {TelegramClient} =
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default function Deals({ navigation }) {
   return (
     <SafeAreaView style={styles.outerContainer}>
