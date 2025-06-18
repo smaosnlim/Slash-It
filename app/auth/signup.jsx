@@ -1,8 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { auth } from '../../backend/firebase';
+import { Alert, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { auth, db } from '../../backend/firebase';
 
 export default function SignUp({navigation}) {
 
@@ -26,14 +26,16 @@ export default function SignUp({navigation}) {
 
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+            
             const user = userCredentials.user;
 
-            await firestore.collection('users').doc(user.uid).set({
+            await db.collection('users').doc(user.uid).set({
                 email: email,
                 age: age,
                 occupation: occupation,
                 interests: interests.split(',').map(interest => interest.trim()), // Split interests by comma and trim whitespace
-            });
+                //createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
             
             Alert.alert("Success", "Account created successfully!");
             //router.push('/login');
@@ -59,7 +61,8 @@ export default function SignUp({navigation}) {
             end={{ x: 0.5, y: 1 }}
             style={styles.container}
         >
-        <View style={styles.view}>
+        <SafeAreaView style={styles.view}>
+        <ScrollView>
             <Image 
                 source={require("../../assets/images/slash-it-logo.png")}
                 style={styles.image}
@@ -123,7 +126,8 @@ export default function SignUp({navigation}) {
             <Pressable onPress={() => navigation.navigate('login')}>
                 <Text style= {styles.text}>Already have an account? Log In</Text>
             </Pressable>
-        </View>
+        </ScrollView>
+        </SafeAreaView>
         </LinearGradient>
     
   )
