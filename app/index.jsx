@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import tinycolor from 'tinycolor2';
 
+import Info from './auth/info.jsx';
 import Login from './auth/login.jsx';
 import SignUp from './auth/signup.jsx';
 import Bills from './features/bills.jsx';
@@ -178,6 +179,7 @@ function Navigation() {
     >
       <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="signup" component={SignUp} />
+      <Stack.Screen name="Info" component={Info} />
       <Stack.Screen name="home" component={MyDrawer} />
     </Stack.Navigator>
   );
