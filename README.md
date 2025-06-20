@@ -4,25 +4,46 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
-1. Install dependencies
+1. Clone the repository
+git clone <repo-url>
+
+2. Install dependencies
 Install Node JS from this link
 [Node JS](https://nodejs.org/en)
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. Start the app
+3. Initialize firebase
+```bash
+firebase init
+```
 
-   ```bash
-   npx expo start
-   ```
+4. Set up a local secret (XAI API KEY from grok 3)
+```bash
+firebase functions:secrets:set XAI_API_KEY
+```
+
+- enter your xAI API key from https://x.ai/api
+
+5. Open 2 terminals & Start the app
+
+- On first terminal
+```bash
+firebase emulators:start
+```
+
+-on second terminal
+```bash
+npx expo start
+```
    OR
-   ```
-   npm run start
-   ```
+```
+npm run start
+```
 
-4. Test the App
+6. Test the App
 For Web Testing
 - Type the local host link into your preferred browser (e.g. http://localhost:8081)
 
