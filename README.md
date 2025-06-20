@@ -34,7 +34,7 @@ firebase functions:secrets:set XAI_API_KEY
 firebase emulators:start
 ```
 
--on second terminal
+- on second terminal
 ```bash
 npx expo start
 ```
