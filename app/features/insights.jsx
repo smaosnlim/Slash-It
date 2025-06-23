@@ -1,17 +1,17 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const colors = ['#ff4f33', '#ffdd33', '#28f144', '#76e2f1', '#504df9', '#ad4df9', '#f94dc7']
+const colors = ['#ff4f33', '#ffdd33', '#28f144', '#76e2f1', '#504df9', '#ad4df9', '#f94dc7'];
 const chartConfig = {
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
 };
 
 export default function Insights({ navigation, route }) {
   const [expenseList, setExpenseList] = useState([]);
-  //const [output, setOutput] = useState(null);
   const [pieData, setPieData] = useState([]);
   const [tips, setTips] = useState([]);
 
@@ -22,41 +22,35 @@ export default function Insights({ navigation, route }) {
     }
     if (route.params?.output) {
       console.log("Received Insights");
-      //setOutput(route.params.output);
       console.log(route.params.output);
-      setPieData(transformData(route.params.output.breakdown))
-      setTips(route.params.output.tips)
-      //setPieData(data);
+      setPieData(transformData(route.params.output.breakdown || {}));
+      setTips(route.params.output.tips || []);
     }
-    }, [route.params?.expenseList, route.params?.output]
-  );
+  }, [route.params?.expenseList, route.params?.output]);
 
-  
   const transformData = (breakdown) => {
     const result = [];
-  // Validate breakdown is a non-null object and not an array
-  if (breakdown && typeof breakdown === 'object' && !Array.isArray(breakdown)) {
-    let colorIndex = 0;
-    for (const key in breakdown) {
-      if (Object.prototype.hasOwnProperty.call(breakdown, key)) {
-        result.push({
-          name: key.charAt(0).toUpperCase() + key.slice(1),
-          value: breakdown[key],
-          color: colors[colorIndex % colors.length],
-          legendFontColor: '#fff',
-          legendFontSize: 14,
-        });
-        colorIndex++;
+    if (breakdown && typeof breakdown === 'object' && !Array.isArray(breakdown)) {
+      let colorIndex = 0;
+      for (const key in breakdown) {
+        if (Object.prototype.hasOwnProperty.call(breakdown, key)) {
+          result.push({
+            name: key.charAt(0).toUpperCase() + key.slice(1),
+            value: breakdown[key],
+            color: colors[colorIndex % colors.length],
+            legendFontColor: '#FFFFFF',
+            legendFontSize: 14,
+          });
+          colorIndex++;
+        }
       }
     }
-  }
-  return result;
-  }
+    return result;
+  };
 
   const handleBack = () => {
     try {
-      console.log('Navigation prop:', navigation);
-      console.log('Attempting to navigate to "Expense Tracker"');
+      console.log('Navigating to "Expense Tracker"');
       navigation.navigate('Expense Tracker');
     } catch (error) {
       console.error('Navigation error:', error);
@@ -64,11 +58,10 @@ export default function Insights({ navigation, route }) {
         console.log('Falling back to goBack');
         navigation.goBack();
       } else {
-        console.error('Cannot go back, navigation stack may be empty');
+        console.error('Cannot go back');
       }
     }
   };
-
 
   const renderExpense = ({ item }) => (
     <View style={styles.expenseItem}>
@@ -82,103 +75,55 @@ export default function Insights({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-      <View style={styles.container}>
-        <View style={styles.card}>
-          <Text style={styles.title}>Insights</Text>
-          {expenseList.length > 0 ? (
-            <FlatList
-              data={expenseList}
-              renderItem={renderExpense}
-              keyExtractor={(item, index) => index.toString()}
-              style={styles.expenseList}
-            />
-          ) : (
-            <Text style={styles.emptyText}>No expenses received.</Text>
-          )}
-          <View>
-            <PieChart
-              data = {pieData}
-              width = {Dimensions.get('window').width - 50}
-              height = {220}
-              chartConfig={chartConfig}
-              accessor="value"
-              backgroundColor='transparent'
-              paddingLeft='15'
-              absolute
-            />
+      <LinearGradient
+        colors={['#1A1A2E', '#16213E']}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={styles.gradient}
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Insights</Text>
           </View>
-          
-          <FlatList
-            data={tips}
-            renderItem={renderTip}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.expenseList}
-          />
-          
-          {/*
-          {output ? (
-            <View style={styles.insightsContainer}>
-              <Text style={styles.insightTitle}>Total Spending: ${output.total}</Text>
-              <Text style={styles.insightTitle}>Breakdown:</Text>
-              {Object.entries(output.breakdown).map(([category, amount]) => (
-                <Text key={category} style={styles.expenseText}>
-                  {category}: ${amount}
-                </Text>
-              ))}
-              <Text style={styles.insightTitle}>Tips:</Text>
+          <View style={styles.card}>
+            {expenseList.length > 0 ? (
               <FlatList
-                data={output.tips}
-                renderItem={renderTip}
+                data={expenseList}
+                renderItem={renderExpense}
                 keyExtractor={(item, index) => index.toString()}
+                style={styles.expenseList}
+              />
+            ) : (
+              <Text style={styles.emptyText}>No expenses received.</Text>
+            )}
+            <View style={styles.chartContainer}>
+              <PieChart
+                data={pieData}
+                width={Dimensions.get('window').width - 50}
+                height={220}
+                chartConfig={chartConfig}
+                accessor="value"
+                backgroundColor="transparent"
+                paddingLeft="15"
+                absolute
               />
             </View>
-          ) : (
-            <Text style={styles.emptyText}>No insights available.</Text>
-          )}
-          */}
-        </View>
-        
-        <Pressable style={styles.backButton} onPress={handleBack}>
-          <MaterialIcons name="arrow-back" size={24} color="#1A1A2E" />
-        </Pressable>
-      </View>
-    </SafeAreaView>
-  /*
-  const renderExpense = ({ item }) => (
-    <View style={styles.expenseItem}>
-      <Text style={styles.expenseText}>{item}</Text>
-    </View>
-    
-  );
-
-  return (
-    <SafeAreaView style={styles.outerContainer}>
-      <View style={styles.container}>
-        <View style={styles.card}>
-          <Text style={styles.title}>Insights</Text>
-          {expenseList.length > 0 ? (
             <FlatList
-              data={expenseList}
-              renderItem={renderExpense}
+              data={tips}
+              renderItem={renderTip}
               keyExtractor={(item, index) => index.toString()}
-              style={styles.expenseList}
+              style={styles.tipsList}
             />
-          ) : (
-            <Text style={styles.emptyText}>No expenses received.</Text>
-          )}
+          </View>
+          <View style={styles.buttonContainer}>
+            <Pressable style={styles.backButton} onPress={handleBack}>
+              <MaterialIcons name="arrow-back" size={24} color="#1A1A2E" />
+              <Text style={styles.buttonText}>Back</Text>
+            </Pressable>
+          </View>
         </View>
-        <View>
-          <Text style = {styles.expenseText}>{output}</Text>
-        </View>
-        <Pressable
-          style={styles.backButton}
-          onPress={handleBack}
-        >
-          <MaterialIcons name="arrow-back" size={24} color="#1A1A2E" />
-        </Pressable>
-      </View>
+      </LinearGradient>
     </SafeAreaView>
-*/
   );
 }
 
@@ -186,17 +131,31 @@ const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
     backgroundColor: '#1A1A2E',
+    border: '2px solid rgba(255, 255, 255, 0.1)',
+  },
+  gradient: {
+    flex: 1,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1A1A2E',
+    paddingTop: 100,
+    paddingBottom: 150,
+  },
+  header: {
+    marginBottom: 30,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: 'rgb(26, 26, 46)',
     borderRadius: 15,
-    padding: 30,
+    padding: 20,
     width: '90%',
     maxWidth: 400,
     alignItems: 'center',
@@ -205,126 +164,84 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 20,
-    textAlign: 'center',
+    borderColor: '#FFFFFF',
   },
   expenseList: {
     width: '100%',
+    marginVertical: 20,
+  },
+  tipsList: {
+    width: '100%',
+    marginVertical: 20,
   },
   expenseItem: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   expenseText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: '600',
     textAlign: 'left',
   },
   emptyText: {
     color: 'rgba(255, 255, 255, 0.5)',
     fontSize: 16,
+    fontWeight: '500',
     textAlign: 'center',
   },
-  backButton: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    width: 48,
-    height: 48,
-    backgroundColor: '#00D4FF',
-    borderRadius: 10,
-    justifyContent: 'center',
+  chartContainer: {
+    marginVertical: 30,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  insightsContainer: {
-    width: '100%',
-    marginTop: 20,
-  },
-  insightTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 10,
   },
   tipText: {
     color: '#FFFFFF',
     fontSize: 16,
+    fontWeight: '500',
     marginLeft: 10,
+    marginBottom: 5,
   },
-});
-
-/*
-const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    backgroundColor: '#1A1A2E',
-  },
-  container: {
-    flex: 1,
+  buttonContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1A1A2E',
-  },
-  card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 15,
-    padding: 30,
     width: '90%',
     maxWidth: 400,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  expenseList: {
-    width: '100%',
-  },
-  expenseItem: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  expenseText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    textAlign: 'left',
-  },
-  emptyText: {
-    color: 'rgba(255, 255, 255, 0.5)',
-    fontSize: 16,
-    textAlign: 'center',
+    flexWrap: 'wrap',
+    paddingHorizontal: 10,
+    margin: 10,
   },
   backButton: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    width: 48,
-    height: 48,
+    width: 160,
     backgroundColor: '#00D4FF',
-    borderRadius: 10,
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
+    margin: 5,
+    minHeight: 50,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  buttonText: {
+    color: '#1A1A2E',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
 });
-*/
