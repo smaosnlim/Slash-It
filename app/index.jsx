@@ -14,23 +14,22 @@ import ExpenseTracker from './features/expensetracker.jsx';
 import Insights from './features/insights.jsx';
 import Investments from './features/investments.jsx';
 import Account from './tabs/account.jsx';
+import Friends from './tabs/Friends.jsx';
 import Home from './tabs/home.jsx';
 import Settings from './tabs/settings.jsx';
 
-// Define main theme color
-const mainThemeColor = '#1a1a2e'; // Navy blue as specified
-const drawerItemBgColor = tinycolor(mainThemeColor).setAlpha(0.8).toRgbString(); // 80% opacity for drawer item boxes
+const mainThemeColor = '#1a1a2e';
+const drawerItemBgColor = tinycolor(mainThemeColor).setAlpha(0.8).toRgbString();
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-// Custom Drawer Content
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView
       {...props}
-      style={{ backgroundColor: mainThemeColor }} // Set background for the scroll view
+      style={{ backgroundColor: mainThemeColor }}
     >
       <View style={[styles.drawerContainer, { backgroundColor: mainThemeColor }]}>
         {props.state.routes.map((route, index) => {
@@ -50,25 +49,25 @@ function CustomDrawerContent(props) {
           let iconName;
           switch (route.name) {
             case 'Home':
-              iconName = 'home-outline'; // Home icon
+              iconName = 'home-outline';
               break;
             case 'Expense Tracker':
-              iconName = 'calculator-outline'; // Calculator icon
+              iconName = 'calculator-outline';
               break;
             case 'Deals':
-              iconName = 'pricetag-outline'; // Discount icon
+              iconName = 'pricetag-outline';
               break;
             case 'Investments':
-              iconName = 'trending-up-outline'; // Stock chart icon
+              iconName = 'trending-up-outline';
               break;
             case 'Bills':
-              iconName = 'cash-outline'; // Money icon
+              iconName = 'cash-outline';
               break;
             case 'Insights':
-              iconName = 'stats-chart-outline'; // Statistics icon
+              iconName = 'stats-chart-outline';
               break;
             default:
-              iconName = 'menu-outline'; // Fallback icon
+              iconName = 'menu-outline';
           }
 
           return (
@@ -99,36 +98,32 @@ function MyTabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          position: 'absolute', // Position the tab bar at the bottom
-          backgroundColor: mainThemeColor, // Navy blue (no opacity)
-          height: 60, // Match header height for consistency",
-          borderTopWidth: 1, // Remove top border
+          position: 'absolute',
+          backgroundColor: mainThemeColor,
+          height: 60,
+          borderTopWidth: 1,
         },
         tabBarIcon: ({ color, size }) => {
           let iconName;
-
           if (route.name === 'Home') {
-            iconName = 'home-outline'; // Home icon
+            iconName = 'home-outline';
           } else if (route.name === 'Settings') {
-            iconName = 'settings-outline'; // Gear icon
+            iconName = 'settings-outline';
           } else if (route.name === 'Account') {
-            iconName = 'person-outline'; // Anonymous profile icon
+            iconName = 'person-outline';
+          } else if (route.name === 'Friends') {
+            iconName = 'people-outline';
           }
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#fff', // White for active tab to match drawer text
-        tabBarInactiveTintColor: '#ccc', // Light gray for inactive tab
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: '#ccc',
         tabBarLabelStyle: {
-          fontSize: 12, // Adjust font size to match header title
-          fontWeight: 'bold', // Match header title weight
+          fontSize: 12,
+          fontWeight: 'bold',
         },
       })}
-    >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Settings" component={Settings} />
-      <Tab.Screen name="Account" component={Account} />
-    </Tab.Navigator>
+    ><Tab.Screen name="Home" component={Home} /><Tab.Screen name="Settings" component={Settings} /><Tab.Screen name="Account" component={Account} /><Tab.Screen name="Friends" component={Friends} /></Tab.Navigator>
   );
 }
 
@@ -138,20 +133,19 @@ function MyDrawer() {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         drawerStyle: {
-          backgroundColor: mainThemeColor, // Navy blue (no opacity)
+          backgroundColor: mainThemeColor,
           width: 250,
-          
         },
-        drawerActiveTintColor: '#fff', // White text for active item
-        drawerInactiveTintColor: '#fff', // White text for inactive items
+        drawerActiveTintColor: '#fff',
+        drawerInactiveTintColor: '#fff',
         headerStyle: {
-          backgroundColor: mainThemeColor, // Match tab bar background
-          height: 0, // Match tab bar height
+          backgroundColor: mainThemeColor,
+          height: 0,
         },
-        headerTintColor: '#fff', // White text to match active tab
+        headerTintColor: '#fff',
         headerTitleStyle: {
-          fontSize: 16, // Match drawer item text size
-          fontWeight: 'bold', // Match active tab label
+          fontSize: 16,
+          fontWeight: 'bold',
         },
       }}
     >
@@ -171,9 +165,8 @@ function Navigation() {
       screenOptions={{
         headerShown: false,
         cardStyle: {
-          backgroundColor: mainThemeColor, // Navy blue (no opacity)
-          flex: 1, // Ensure the stack fills the screen
-          
+          backgroundColor: mainThemeColor,
+          flex: 1,
         },
       }}
     >
@@ -190,30 +183,30 @@ export default Navigation;
 const styles = StyleSheet.create({
   drawerContainer: {
     padding: 10,
-    flex: 1, // Ensure the container takes up the full height
+    flex: 1,
   },
   drawerItem: {
-    backgroundColor: drawerItemBgColor, // Box background with 80% opacity theme color
-    borderRadius: 10, // Rounded corners
+    backgroundColor: drawerItemBgColor,
+    borderRadius: 10,
     marginVertical: 5,
     padding: 10,
   },
   drawerItemActive: {
-    backgroundColor: mainThemeColor, // Full opacity for active item
+    backgroundColor: mainThemeColor,
   },
   drawerItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   drawerItemIcon: {
-    marginRight: 10, // Space between icon and text
+    marginRight: 10,
   },
   drawerItemText: {
-    color: '#fff', // White text for inactive items
+    color: '#fff',
     fontSize: 16,
   },
   drawerItemTextActive: {
-    color: '#fff', // White text for active items
+    color: '#fff',
     fontWeight: 'bold',
   },
 });
