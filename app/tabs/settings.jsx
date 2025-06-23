@@ -57,15 +57,15 @@ export default function Settings({ navigation }) {
               <Text style={styles.sectionText}>Profile</Text>
               <View style={styles.profileItem}>
                 <Text style={styles.profileLabel}>Age:</Text>
-                <Text style={styles.profileValue}>{age || 'Not set'}</Text>
+                <Text style={styles.profileValue}>{age}</Text>
               </View>
               <View style={styles.profileItem}>
                 <Text style={styles.profileLabel}>Occupation:</Text>
-                <Text style={styles.profileValue}>{occupation || 'Not set'}</Text>
+                <Text style={styles.profileValue}>{occupation}</Text>
               </View>
               <View style={styles.profileItem}>
                 <Text style={styles.profileLabel}>Interests:</Text>
-                <Text style={styles.profileValue}>{interests || 'Not set'}</Text>
+                <Text style={styles.profileValue}>{interests}</Text>
               </View>
             </View>
           </View>
