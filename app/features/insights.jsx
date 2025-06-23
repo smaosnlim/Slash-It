@@ -1,11 +1,19 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PieChart } from 'react-native-chart-kit';
+
+const colors = ['#ff4f33', '#ffdd33', '#28f144', '#76e2f1', '#504df9', '#ad4df9', '#f94dc7']
+const chartConfig = {
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+};
 
 export default function Insights({ navigation, route }) {
   const [expenseList, setExpenseList] = useState([]);
-  const [output, setOutput] = useState(null);
+  //const [output, setOutput] = useState(null);
+  const [pieData, setPieData] = useState([]);
+  const [tips, setTips] = useState([]);
 
   useEffect(() => {
     if (route.params?.expenseList) {
@@ -14,9 +22,36 @@ export default function Insights({ navigation, route }) {
     }
     if (route.params?.output) {
       console.log("Received Insights");
-      setOutput(route.params.output);
+      //setOutput(route.params.output);
+      console.log(route.params.output);
+      setPieData(transformData(route.params.output.breakdown))
+      setTips(route.params.output.tips)
+      //setPieData(data);
     }
-  }, [route.params?.expenseList, route.params?.output]);
+    }, [route.params?.expenseList, route.params?.output]
+  );
+
+  
+  const transformData = (breakdown) => {
+    const result = [];
+  // Validate breakdown is a non-null object and not an array
+  if (breakdown && typeof breakdown === 'object' && !Array.isArray(breakdown)) {
+    let colorIndex = 0;
+    for (const key in breakdown) {
+      if (Object.prototype.hasOwnProperty.call(breakdown, key)) {
+        result.push({
+          name: key.charAt(0).toUpperCase() + key.slice(1),
+          value: breakdown[key],
+          color: colors[colorIndex % colors.length],
+          legendFontColor: '#fff',
+          legendFontSize: 14,
+        });
+        colorIndex++;
+      }
+    }
+  }
+  return result;
+  }
 
   const handleBack = () => {
     try {
@@ -35,7 +70,7 @@ export default function Insights({ navigation, route }) {
   };
 
 
-const renderExpense = ({ item }) => (
+  const renderExpense = ({ item }) => (
     <View style={styles.expenseItem}>
       <Text style={styles.expenseText}>{item}</Text>
     </View>
@@ -60,6 +95,27 @@ const renderExpense = ({ item }) => (
           ) : (
             <Text style={styles.emptyText}>No expenses received.</Text>
           )}
+          <View>
+            <PieChart
+              data = {pieData}
+              width = {Dimensions.get('window').width - 50}
+              height = {220}
+              chartConfig={chartConfig}
+              accessor="value"
+              backgroundColor='transparent'
+              paddingLeft='15'
+              absolute
+            />
+          </View>
+          
+          <FlatList
+            data={tips}
+            renderItem={renderTip}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.expenseList}
+          />
+          
+          {/*
           {output ? (
             <View style={styles.insightsContainer}>
               <Text style={styles.insightTitle}>Total Spending: ${output.total}</Text>
@@ -79,7 +135,9 @@ const renderExpense = ({ item }) => (
           ) : (
             <Text style={styles.emptyText}>No insights available.</Text>
           )}
+          */}
         </View>
+        
         <Pressable style={styles.backButton} onPress={handleBack}>
           <MaterialIcons name="arrow-back" size={24} color="#1A1A2E" />
         </Pressable>
