@@ -57,7 +57,7 @@ export default function Friends({ navigation }) {
           </View>
           <View style={styles.friendsSidebar}>
             <View style={styles.friendsContent}>
-              <Text style={styles.sectionText}>Your Friends</Text>
+              <Text style={styles.friendsText}>Your Friends</Text>
             </View>
           </View>
           {showOverlay && (
@@ -219,23 +219,29 @@ const styles = StyleSheet.create({
   friendsSidebar: {
     position: 'absolute',
     right: 10,
-    top: 200,
-    width: 100,
-    height: '60%',
+    top: 150,
+    width: 80,
+    height: 80,
     backgroundColor: 'rgb(26, 26, 46)',
-    borderRadius: 15,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    padding: 10,
+    padding: 5,
   },
   friendsContent: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+  },
+  friendsText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   overlayBackground: {
     position: 'absolute',
