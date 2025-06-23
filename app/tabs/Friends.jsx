@@ -1,0 +1,290 @@
+import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+export default function Friends({ navigation }) {
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  const toggleOverlay = () => {
+    setShowOverlay(!showOverlay);
+  };
+
+  return (
+    <SafeAreaView style={styles.outerContainer}>
+      <LinearGradient
+        colors={['#1A1A2E', '#16213E']}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={styles.gradient}
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Friends</Text>
+          </View>
+          <View style={styles.searchRow}>
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search by username"
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              />
+            </View>
+            <Pressable onPress={toggleOverlay} style={styles.notificationContainer}>
+              <Ionicons
+                name="notifications-outline"
+                size={24}
+                color="#FFFFFF"
+                style={styles.notificationIcon}
+              />
+            </Pressable>
+          </View>
+          <View style={styles.mainContent}>
+            <View style={styles.card}>
+              <View style={styles.sectionPlaceholder}>
+                <Text style={styles.sectionText}>Search Results</Text>
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <Pressable
+                style={styles.button}
+                onPress={() => navigation.navigate('Home')}
+              >
+                <Text style={styles.buttonText}>Home</Text>
+              </Pressable>
+            </View>
+          </View>
+          <View style={styles.friendsSidebar}>
+            <View style={styles.friendsContent}>
+              <Text style={styles.sectionText}>Your Friends</Text>
+            </View>
+          </View>
+          {showOverlay && (
+            <View style={styles.overlayBackground}>
+              <View style={styles.overlayCard}>
+                <Text style={styles.overlayTitle}>Pending Friend Requests</Text>
+                <View style={styles.sectionPlaceholder}>
+                  <Text style={styles.sectionText}>No pending requests</Text>
+                </View>
+                <Pressable
+                  style={styles.closeButton}
+                  onPress={toggleOverlay}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        </View>
+      </LinearGradient>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+    backgroundColor: '#1A1A2E',
+    border: '2px solid rgba(255, 255, 255, 0.1)',
+  },
+  gradient: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    paddingBottom: 150,
+    position: 'relative',
+  },
+  header: {
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  searchRow: {
+    flexDirection: 'row',
+    width: '90%',
+    maxWidth: 400,
+    alignSelf: 'center',
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  searchContainer: {
+    flex: 1,
+  },
+  searchInput: {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    color: '#FFFFFF',
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  notificationContainer: {
+    marginLeft: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 10,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  notificationIcon: {
+    alignSelf: 'center',
+  },
+  mainContent: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  card: {
+    backgroundColor: 'rgb(26, 26, 46)',
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 20,
+    width: '90%',
+    maxWidth: 400,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+  },
+  sectionPlaceholder: {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 10,
+    paddingVertical: 30,
+    paddingHorizontal: 40,
+    marginBottom: 15,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    width: '100%',
+    height: 100,
+  },
+  sectionText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '90%',
+    maxWidth: 400,
+    flexWrap: 'wrap',
+    paddingHorizontal: 10,
+    margin: 10,
+  },
+  button: {
+    width: 160,
+    backgroundColor: '#00D4FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    margin: 5,
+    minHeight: 50,
+  },
+  buttonText: {
+    color: '#1A1A2E',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  friendsSidebar: {
+    position: 'absolute',
+    right: 10,
+    top: 200,
+    width: 100,
+    height: '60%',
+    backgroundColor: 'rgb(26, 26, 46)',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    padding: 10,
+  },
+  friendsContent: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  overlayBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  overlayCard: {
+    backgroundColor: 'rgb(26, 26, 46)',
+    borderRadius: 15,
+    padding: 20,
+    width: '80%',
+    maxWidth: 350,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+  },
+  overlayTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  closeButton: {
+    width: 120,
+    backgroundColor: '#00D4FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: '#1A1A2E',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+});
