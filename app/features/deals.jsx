@@ -1,26 +1,54 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, Linking, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// const {TelegramClient} =
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { useEffect, useMemo, useState } from 'react';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+const functions = getFunctions();
+const getDeals = useMemo(() => httpsCallable(functions, 'getDeals'), []);
 
 export default function Deals({ navigation }) {
+
+  const [deals, setDeals] = useState([]);
+
+  useEffect(() => {
+    const fetchDeals = async () => {
+      try {
+        //const getDeals = httpsCallable(functions, 'getDeals');
+        const result = await getDeals();
+        setDeals(result.data.deals);
+        console.log("Deals fetched successfully:", result.data);
+      } catch (error) {
+        console.error("Error fetching deals:", error);
+      }
+    };
+
+    fetchDeals();
+  })
+
+  const renderDeal = ({item}) => (
+    <View style={styles.dealPlaceholder}>
+    <TouchableOpacity
+      style={styles.dealContainer}
+      onPress={() => Linking.openURL(item.link)}
+    >
+      {item.image ? (
+        <Image source={{ uri: item.image }}/>
+      ) : null}
+      <View style={styles.dealText}>
+        <Text style={styles.dealText}>{item.title}</Text>
+        <Text numberOfLines={3}>
+          {item.summary}
+        </Text>
+      </View>
+    </TouchableOpacity>
+    </View>
+  )
+
   return (
     <SafeAreaView style={styles.outerContainer}>
+    <ScrollView>
       <LinearGradient
         colors={['#1A1A2E', '#16213E']}
         start={{ x: 0.5, y: 0 }}
@@ -31,7 +59,15 @@ export default function Deals({ navigation }) {
           <View style={styles.card}>
             <Text style={styles.title}>Deals</Text>
             <View style={styles.dealContainer}>
+              <FlatList
+                data={deals}
+                renderItem={renderDeal}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={styles.list}
+              />
+              {/*
               <View style={styles.dealPlaceholder}>
+              
                 <Text style={styles.dealText}>Deal 1</Text>
               </View>
               <View style={styles.dealPlaceholder}>
@@ -40,6 +76,7 @@ export default function Deals({ navigation }) {
               <View style={styles.dealPlaceholder}>
                 <Text style={styles.dealText}>Deal 3</Text>
               </View>
+              */}
             </View>
           </View>
           <Pressable
@@ -50,6 +87,7 @@ export default function Deals({ navigation }) {
           </Pressable>
         </View>
       </LinearGradient>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -109,7 +147,7 @@ const styles = StyleSheet.create({
   },
   dealText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '600',
   },
   button: {
@@ -125,5 +163,8 @@ const styles = StyleSheet.create({
     color: '#1A1A2E',
     fontSize: 16,
     fontWeight: '600',
+  },
+  list: {
+    paddingBottom: 20,
   },
 });

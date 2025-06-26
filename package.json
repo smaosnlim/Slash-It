@@ -24,6 +24,8 @@
     "@react-navigation/stack": "^7.3.2",
     "async-storage": "^0.1.0",
     "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "cors": "^2.8.5",
     "expo": "~53.0.9",
     "expo-blur": "^14.1.5",
     "expo-constants": "~17.1.6",

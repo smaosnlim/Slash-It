@@ -1,7 +1,9 @@
-const { onRequest } = require("firebase-functions/v2/https");
+//const { onRequest } = require("firebase-functions/v2/https");
 const { onCall, https } = require("firebase-functions/v2/https");
 const axios = require("axios");
 const OpenAI = require("openai");
+
+const cheerio = require("cheerio"); 
 
 exports.getInsights = onCall( {
     secrets: ["XAI_API_KEY"] },
@@ -73,81 +75,28 @@ exports.getInsights = onCall( {
     }
 })
 
-
-
-/*
-const { onRequest } = require('firebase-functions/v2/https');
-const { OpenAI } = require('openai');
-const { initializeApp } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
-
-// Initialize Firebase Admin
-initializeApp();
-const db = getFirestore();
-
-exports.getInsights = onRequest({ cors: true }, async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+exports.getDeals = onCall( {}, async (request) => {
   try {
-    const { grokPrompt } = req.body;
+    const url = 'https://singpromos.com/dining-restaurants-food/';
+    const { data: html } = await axios.get(url);
+    const $ = cheerio.load(html);
+    const deals = [];
 
-    if (!grokPrompt) {
-      return res.status(400).json({ error: 'grokPrompt is required' });
-    }
+    // Select deal articles based on the website's structure
+    $('article').each((index, element) => {
+      const title = $(element).find('.entry-title a').text().trim();
+      const link = $(element).find('.entry-title a').attr('href');
+      const summary = $(element).find('.entry-summary p').first().text().trim();
+      const image = $(element).find('.mh-loop-thumb a img').attr('src') || '';
 
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({ error: 'API key not configured' });
-    }
-
-    // Initialize OpenAI client
-    const client = new OpenAI({
-      apiKey,
-      baseURL: 'https://api.x.ai/v1',
+      if (title && link) {
+        deals.push({ title, link, summary, image });
+      }
     });
 
-    // Make the API call
-    const completion = await client.chat.completions.create({
-      model: 'grok-3-latest',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a helpful assistant that provides insights on expenses.',
-        },
-        {
-          role: 'user',
-          content: grokPrompt,
-        },
-      ],
-    });
-
-    // Extract the response
-    const output = completion.choices[0].message;
-
-    // Sanitize data for Firestore (remove undefined values)
-    const dataToSave = {
-      grokPrompt,
-      responseContent: output.content || '',
-      timestamp: new Date().toISOString(),
-      original: output.original || null, // Replace undefined with null
-    };
-
-    // Save to Firestore
-    await db.collection('insights').add(dataToSave);
-    console.log('Saved to Firestore:', dataToSave);
-
-    // Return the response
-    res.status(200).json(output);
+    return { deals };
   } catch (error) {
-    console.error('Error in function:', {
-      message: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
-      stack: error.stack,
-    });
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    console.error('Error scraping deals:', error);
+    throw new https.HttpsError('internal', 'Failed to scrape deals');
   }
 });
-*/
