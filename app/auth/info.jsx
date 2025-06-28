@@ -23,13 +23,24 @@ export default function Info({navigation}) {
             setDoc(doc(db, 'slash-it-users', userId), {
                 age: age,
                 occupation: occupation,
-                interests: interests.split(',').map(interest => interest.trim())
-            }, {merge: true}).then(() => {
+                interests: interests.split(',').map(interest => interest.trim()),
+                friends: [],
+              }, {merge: true}).then(() => {
                 console.log('Firestore write completed');
             }).catch((error) => {
                 console.error('Error writing to Firestore:', error);
                 Alert.alert('Error', 'Failed to save information. Please try again.');
             })
+
+            /*
+            setDoc(doc(collection(db, `slash-it-users/${userId}/friends`), 'placeholder'), {
+                initialized: true,
+            }, {merge: true}).then(() => {
+                console.log('Friends collection initialized');
+            }).catch((error) => {
+                console.error('Error initializing friends collection:', error);
+            });
+            */
 
 
             /*

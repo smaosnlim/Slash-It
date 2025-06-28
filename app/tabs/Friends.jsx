@@ -1,15 +1,44 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { getFirestore } from 'firebase/firestore';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const { app } = require('../../backend/firebase'); 
+
+
+
 export default function Friends({ navigation }) {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [searchResult, setSearchResult] = useState([]); 
+
+  const db = getFirestore(app);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
+
+  const handleSearch = () => {
+    console.log('Search text:', text);
+  }
+
+  const handleAddFriend = (toUserId) = {
+
+  }
+
+  const displayRequests = () => {
+
+  }
+
+  const handleAcceptRequest = (requestId, fromUserId) => {
+
+  }
+
+  const handleRejectRequest = (requestId) => {
+
+  }
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -29,6 +58,7 @@ export default function Friends({ navigation }) {
                 style={styles.searchInput}
                 placeholder="Search by username"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                onChangeText={handleSearch}
               />
             </View>
             <Pressable onPress={toggleOverlay} style={styles.notificationContainer}>
