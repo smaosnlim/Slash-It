@@ -25,68 +25,38 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-function CustomDrawerContent(props) {
+const ICON_MAP = {
+  Home: 'home-outline',
+  'Expense Tracker': 'calculator-outline',
+  Deals: 'pricetag-outline',
+  Investments: 'trending-up-outline',
+  Bills: 'cash-outline',
+  Insights: 'stats-chart-outline',
+  Settings: 'settings-outline',
+  Account: 'person-outline',
+  Friends: 'people-outline',
+}
+
+function CustomDrawerContent({ navigation, state }) {
   return (
-    <DrawerContentScrollView
-      {...props}
-      style={{ backgroundColor: mainThemeColor }}
-    >
-      <View style={[styles.drawerContainer, { backgroundColor: mainThemeColor }]}>
-        {props.state.routes.map((route, index) => {
-          const isFocused = props.state.index === index;
-          const onPress = () => {
-            const event = props.navigation.emit({
-              type: 'drawerItemPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!event.defaultPrevented) {
-              props.navigation.navigate(route.name);
-            }
-          };
-
-          let iconName;
-          switch (route.name) {
-            case 'Home':
-              iconName = 'home-outline';
-              break;
-            case 'Expense Tracker':
-              iconName = 'calculator-outline';
-              break;
-            case 'Deals':
-              iconName = 'pricetag-outline';
-              break;
-            case 'Investments':
-              iconName = 'trending-up-outline';
-              break;
-            case 'Bills':
-              iconName = 'cash-outline';
-              break;
-            case 'Insights':
-              iconName = 'stats-chart-outline';
-              break;
-            default:
-              iconName = 'menu-outline';
-          }
-
-          return (
-            <DrawerItem
-              key={route.key}
-              label={() => (
-                <View style={styles.drawerItemContent}>
-                  <Ionicons name={iconName} size={24} color="#fff" style={styles.drawerItemIcon} />
-                  <Text style={[styles.drawerItemText, isFocused && styles.drawerItemTextActive]}>
-                    {route.name}
-                  </Text>
-                </View>
-              )}
-              onPress={onPress}
-              style={[styles.drawerItem, isFocused && styles.drawerItemActive]}
-              focused={isFocused}
-            />
-          );
-        })}
+    <DrawerContentScrollView style={{ backgroundColor: mainThemeColor }}>
+      <View style={styles.drawerContainer}>
+        {state.routes.map((route, index) => (
+          <DrawerItem
+            key={route.key}
+            label={() => (
+              <View style={styles.drawerItemContent}>
+                <Ionicons name={ICON_MAP[route.name] || 'menu-outline'} size={24} color="#fff" style={styles.drawerItemIcon} />
+                <Text style={[styles.drawerItemText, state.index === index && styles.drawerItemTextActive]}>
+                  {route.name}
+                </Text>
+              </View>
+            )}
+            onPress={() => navigation.navigate(route.name)}
+            style={[styles.drawerItem, state.index === index && styles.drawerItemActive]}
+            focused={state.index === index}
+          />
+        ))}
       </View>
     </DrawerContentScrollView>
   );
@@ -97,33 +67,20 @@ function MyTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: {
-          position: 'absolute',
-          backgroundColor: mainThemeColor,
-          height: 60,
-          borderTopWidth: 1,
-        },
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-          if (route.name === 'Home') {
-            iconName = 'home-outline';
-          } else if (route.name === 'Settings') {
-            iconName = 'settings-outline';
-          } else if (route.name === 'Account') {
-            iconName = 'person-outline';
-          } else if (route.name === 'Friends') {
-            iconName = 'people-outline';
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
+        tabBarStyle: styles.tabBar,
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name={ICON_MAP[route.name]} size={size} color={color} />
+        ),
         tabBarActiveTintColor: '#fff',
         tabBarInactiveTintColor: '#ccc',
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
-        },
+        tabBarLabelStyle: styles.tabBarLabel,
       })}
-    ><Tab.Screen name="Home" component={Home} /><Tab.Screen name="Settings" component={Settings} /><Tab.Screen name="Account" component={Account} /><Tab.Screen name="Friends" component={Friends} /></Tab.Navigator>
+    >
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Settings" component={Settings} />
+      <Tab.Screen name="Account" component={Account} />
+      <Tab.Screen name="Friends" component={Friends} />
+    </Tab.Navigator>
   );
 }
 
@@ -132,21 +89,10 @@ function MyDrawer() {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
-        drawerStyle: {
-          backgroundColor: mainThemeColor,
-          width: 250,
-        },
-        drawerActiveTintColor: '#fff',
-        drawerInactiveTintColor: '#fff',
-        headerStyle: {
-          backgroundColor: mainThemeColor,
-          height: 0,
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontSize: 16,
-          fontWeight: 'bold',
-        },
+        drawerStyle: styles.drawerStyle,
+        headerStyle: styles.headerStyle,
+        headerTintColor: styles.headerTintColor,
+        headerTitleStyle: styles.headerTitleStyle,
       }}
     >
       <Drawer.Screen name="Home" component={MyTabs} />
@@ -164,10 +110,7 @@ function Navigation() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        cardStyle: {
-          backgroundColor: mainThemeColor,
-          flex: 1,
-        },
+        cardStyle: styles.cardStyle,
       }}
     >
       <Stack.Screen name="login" component={Login} />
@@ -181,32 +124,57 @@ function Navigation() {
 export default Navigation;
 
 const styles = StyleSheet.create({
-  drawerContainer: {
-    padding: 10,
-    flex: 1,
+  drawerContainer: { 
+    padding: 10, 
+    flex: 1 
   },
-  drawerItem: {
-    backgroundColor: drawerItemBgColor,
-    borderRadius: 10,
-    marginVertical: 5,
-    padding: 10,
+  drawerItem: { 
+    backgroundColor: drawerItemBgColor, 
+    borderRadius: 10, 
+    marginVertical: 5, 
+    padding: 10 
   },
-  drawerItemActive: {
+  drawerItemActive: { 
+    backgroundColor: mainThemeColor 
+  },
+  drawerItemContent: { 
+    flexDirection: 'row', 
+    alignItems: 'center' 
+  },
+  drawerItemIcon: { 
+    marginRight: 10 
+  },
+  drawerItemText: { 
+    color: '#fff', fontSize: 16
+  },
+  drawerItemTextActive: { 
+    color: '#fff', fontWeight: 'bold' 
+  },
+  tabBar: { 
+    position: 'absolute', 
+    backgroundColor: mainThemeColor, 
+    height: 60, 
+    borderTopWidth: 1 
+  },
+  tabBarLabel: { 
+    fontSize: 12,
+    fontWeight: 'bold' 
+  },
+  drawerStyle: {
     backgroundColor: mainThemeColor,
+    width: 250,
   },
-  drawerItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  headerStyle: {
+    backgroundColor: mainThemeColor,
+    height: 0,
   },
-  drawerItemIcon: {
-    marginRight: 10,
-  },
-  drawerItemText: {
-    color: '#fff',
+  headerTintColor: '#fff',
+  headerTitleStyle: {
     fontSize: 16,
-  },
-  drawerItemTextActive: {
-    color: '#fff',
     fontWeight: 'bold',
+  },
+  cardStyle: {
+    backgroundColor: mainThemeColor,
+    flex: 1,
   },
 });
