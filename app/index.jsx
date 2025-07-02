@@ -126,7 +126,7 @@ export default Navigation;
 const styles = StyleSheet.create({
   drawerContainer: { 
     padding: 10, 
-    flex: 1 
+    flex: 1
   },
   drawerItem: { 
     backgroundColor: drawerItemBgColor, 
@@ -139,10 +139,11 @@ const styles = StyleSheet.create({
   },
   drawerItemContent: { 
     flexDirection: 'row', 
-    alignItems: 'center' 
+    alignItems: 'center',
+     
   },
   drawerItemIcon: { 
-    marginRight: 10 
+    marginRight: 10, 
   },
   drawerItemText: { 
     color: '#fff', fontSize: 16
@@ -154,7 +155,8 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     backgroundColor: mainThemeColor, 
     height: 60, 
-    borderTopWidth: 1 
+    borderTopWidth: 1, 
+    marginBottom: 20,
   },
   tabBarLabel: { 
     fontSize: 12,
@@ -176,5 +178,7 @@ const styles = StyleSheet.create({
   cardStyle: {
     backgroundColor: mainThemeColor,
     flex: 1,
+    paddingTop: 20,
+    paddingLeft: 0
   },
 });

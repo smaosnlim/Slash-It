@@ -1,5 +1,4 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { FlatList, Image, Linking, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Linking, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -25,7 +24,7 @@ export default function Deals({ navigation }) {
     };
 
     fetchDeals();
-  })
+  }, []);
 
   const renderDeal = ({item}) => (
     <View style={styles.dealPlaceholder}>
@@ -34,7 +33,11 @@ export default function Deals({ navigation }) {
       onPress={() => Linking.openURL(item.link)}
     >
       {item.image ? (
-        <Image source={{ uri: item.image }}/>
+        <Image 
+          source={{ uri: item.image }}
+          style={styles.dealImage}
+          resizeMode='contain'
+          />
       ) : null}
       <View style={styles.dealText}>
         <Text style={styles.dealText}>{item.title}</Text>
@@ -48,46 +51,25 @@ export default function Deals({ navigation }) {
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-    <ScrollView>
-      <LinearGradient
-        colors={['#1A1A2E', '#16213E']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={styles.gradient}
-      >
-        <View style={styles.container}>
-          <View style={styles.card}>
+    {/*<ScrollView>*/}
+        <View style={styles.card}>
             <Text style={styles.title}>Deals</Text>
-            <View style={styles.dealContainer}>
-              <FlatList
-                data={deals}
-                renderItem={renderDeal}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={styles.list}
-              />
-              {/*
-              <View style={styles.dealPlaceholder}>
-              
-                <Text style={styles.dealText}>Deal 1</Text>
-              </View>
-              <View style={styles.dealPlaceholder}>
-                <Text style={styles.dealText}>Deal 2</Text>
-              </View>
-              <View style={styles.dealPlaceholder}>
-                <Text style={styles.dealText}>Deal 3</Text>
-              </View>
-              */}
-            </View>
-          </View>
-          <Pressable
-            style={styles.button}
-            onPress={() => navigation.navigate('Home')}
-          >
+            
+            <FlatList
+              data={deals}
+              renderItem={renderDeal}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={styles.list}
+            />
+            <Pressable
+              style={styles.button}
+              onPress={() => navigation.navigate('Home')}
+            >
             <Text style={styles.buttonText}>Home</Text>
           </Pressable>
         </View>
-      </LinearGradient>
-      </ScrollView>
+      
+      {/*</ScrollView> */}
     </SafeAreaView>
   );
 }
@@ -95,18 +77,16 @@ export default function Deals({ navigation }) {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-  },
-  gradient: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
+    backgroundColor: '#1A1A2E',
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   card: {
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 30,
     width: '90%',
     maxWidth: 400,
@@ -117,6 +97,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
+    marginTop: 50,
     marginBottom: 20,
   },
   title: {
@@ -143,18 +124,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     width: '100%',
-    height: 100, // Increased height for larger boxes
+    height: 'auto', // Increased height for larger boxes
   },
   dealText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
+  dealImage: {
+    width: 100,
+    height: 70,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
   button: {
     width: 100,
     backgroundColor: '#00D4FF',
     alignItems: 'center',
     padding: 10,
+    marginTop: 20,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
