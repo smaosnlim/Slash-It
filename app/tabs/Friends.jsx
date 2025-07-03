@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
-import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { addDoc, collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,7 +13,9 @@ export default function Friends({ navigation }) {
 
   const [showOverlay, setShowOverlay] = useState(false);
   //const [searchText, setSearchText] = useState('');
-  const [searchResult, setSearchResult] = useState([]); 
+  const [searchResult, setSearchResult] = useState([]);
+  const [reqFrom, setReqFrom] = useState([]); 
+  
 
   const db = getFirestore(app);
   const currentUserId = getAuth(app).currentUser.uid;
@@ -47,12 +49,39 @@ export default function Friends({ navigation }) {
     }
   };
 
-  const handleAddFriend = (toUserId) = {
-
+  const handleAddFriend = async (toUserId) => {
+    try {
+      const friendRequestsRef = collection(db, 'friend-requests');
+      await addDoc(friendRequestsRef, {
+        fromUserId: currentUserId,
+        toUserId,
+        status: 'pending',
+        //createdAt: serverTimestamp(),
+      });
+      alert('Friend request sent!');
+    } catch (error) {
+      console.error('Error sending friend request:', error);
+      alert('Failed to send friend request.');
+    }
   }
 
-  const displayRequests = () => {
+  const findRequests = async () => {
+    
+    const reqRef = collection(db, 'friend-requests');
+    const q = query(reqRef, where('toUserId', '==', currentUserId));
+    //console.log(currentUserId);
+    const pendingRequests = await getDocs(q);
+    const reqResults = pendingRequests.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(user => user.id !== currentUserId);
+    //setReqFrom(reqResults);
+    //console.log(reqResults.length);
 
+
+    const tempReqFrom = reqResults.map(item => item.fromUserId);
+    //DISPLAYS USER IDS THAT REQUESTS CAME FROM
+    console.log(tempReqFrom);
+    
   }
 
   const handleAcceptRequest = (requestId, fromUserId) => {
@@ -84,7 +113,13 @@ export default function Friends({ navigation }) {
                 onChangeText={handleSearch}
               />
             </View>
-            <Pressable onPress={toggleOverlay} style={styles.notificationContainer}>
+            <Pressable onPress={() => {
+              toggleOverlay();
+              findRequests();
+              }}
+              style={styles.notificationContainer}
+              
+            >
               <Ionicons
                 name="notifications-outline"
                 size={24}
@@ -125,11 +160,13 @@ export default function Friends({ navigation }) {
               </Pressable>
             </View>
           </View>
+          {/*
           <View style={styles.friendsSidebar}>
             <View style={styles.friendsContent}>
               <Text style={styles.friendsText}>Your Friends</Text>
             </View>
           </View>
+          */}
           {showOverlay && (
             <View style={styles.overlayBackground}>
               <View style={styles.overlayCard}>
