@@ -1,28 +1,51 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { app } = require('../../backend/firebase'); 
 
 
-
 export default function Friends({ navigation }) {
+
   const [showOverlay, setShowOverlay] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  //const [searchText, setSearchText] = useState('');
   const [searchResult, setSearchResult] = useState([]); 
 
   const db = getFirestore(app);
+  const currentUserId = getAuth(app).currentUser.uid;
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
 
-  const handleSearch = () => {
-    console.log('Search text:', text);
-  }
+  const handleSearch = async (searchText) => {
+    try {
+      const usersRef = collection(db, 'slash-it-users');
+      const normalizedQuery = searchText.toLowerCase();
+      /*
+      const q = query(usersRef, 
+        where('email', '>=', searchText.toLowerCase()), 
+        where('email', '<=', searchText.toLowerCase() + '\uf8ff')
+      );
+      */
+      //console.log(searchText)
+      //Must be exact match in email
+      const q = query(usersRef, where('email', '==', normalizedQuery));
+      const querySnapshot = await getDocs(q);
+      const results = querySnapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(user => user.id !== currentUserId);
+      setSearchResult(results);
+      //console.log(results)
+    } catch (error) {
+      console.error('Error searching users:', error);
+      alert('Failed to search users.');
+    }
+  };
 
   const handleAddFriend = (toUserId) = {
 
@@ -72,9 +95,26 @@ export default function Friends({ navigation }) {
           </View>
           <View style={styles.mainContent}>
             <View style={styles.card}>
-              <View style={styles.sectionPlaceholder}>
-                <Text style={styles.sectionText}>Search Results</Text>
-              </View>
+              <Text style={styles.sectionText}>Search Results</Text>
+              <FlatList
+                data={searchResult}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                  <View style={styles.results}>
+                    <Ionicons
+                      name="person-outline"
+                      size={36}
+                      color="#FFFFFF"
+                      style={styles.notificationIcon}
+                    />
+                    <Text style={styles.resultText}>{item.email}</Text>
+                    <Pressable onPress={() => handleAddFriend(item.id)} style={styles.addButton}>
+                      <Text>Add</Text>
+                    </Pressable>
+                  </View>
+                )}
+              />
+              
             </View>
             <View style={styles.buttonContainer}>
               <Pressable
@@ -176,6 +216,7 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     alignSelf: 'center',
+    padding: 10
   },
   mainContent: {
     alignItems: 'center',
@@ -323,4 +364,21 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+  results: {
+    padding: 20,
+    flexDirection: 'row',
+  },
+  resultText : {
+    color: "white",
+    padding: 20,
+    paddingTop: 20,
+    
+  },
+  addButton: {
+    padding: 15,
+    marginLeft: 10,
+    backgroundColor: 'skyblue',
+    borderRadius: 20,
+    justifyContent: 'center',
+  }
 });

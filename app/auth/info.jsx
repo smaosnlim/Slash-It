@@ -1,11 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from 'expo-router';
 import { getAuth } from "firebase/auth";
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { Alert, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { app } from '../../backend/firebase';
 
-export default function Info({navigation}) {
+export default function Info({route}) {
+
+    const navigation = useNavigation();
+    const {userEmail, otherParams} = route.params;
 
     const [age, setAge] = useState('');
     const [occupation, setOccupation] = useState('');
@@ -21,6 +25,7 @@ export default function Info({navigation}) {
             const db = getFirestore(app);
 
             setDoc(doc(db, 'slash-it-users', userId), {
+                email: userEmail,
                 age: age,
                 occupation: occupation,
                 interests: interests.split(',').map(interest => interest.trim()),

@@ -47,7 +47,9 @@ export default function SignUp({navigation}) {
             
             Alert.alert("Success", "Account created successfully!");
             //router.push('/login');
-            navigation.navigate('Info');
+            navigation.navigate('Info', {
+              userEmail : email
+            });
           } catch (error) {
             console.error("Signup Error: ", error.code, error.message);
             let errorMessage = 'Something went wrong';
