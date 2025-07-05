@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -65,6 +65,20 @@ export default function Friends({ navigation }) {
     }
   }
 
+  const getEmailsFromUserIds = async (userIds) => {
+  try {
+    const emails = [];
+    for (const userId of userIds) {
+      const userDoc = await getDoc(doc(db, 'slash-it-users', userId));
+      emails.push(userDoc.exists() ? userDoc.data().email : 'Unknown');
+    }
+    return emails;
+    } catch (error) {
+      console.error('Error fetching user emails:', error);
+      return [];
+    }
+  };
+
   const findRequests = async () => {
     
     const reqRef = collection(db, 'friend-requests');
@@ -81,7 +95,9 @@ export default function Friends({ navigation }) {
     const tempReqFrom = reqResults.map(item => item.fromUserId);
     //DISPLAYS USER IDS THAT REQUESTS CAME FROM
     console.log(tempReqFrom);
-    
+    const reqEmails = await getEmailsFromUserIds(tempReqFrom);
+    //console.log(reqEmails);
+    setReqFrom(reqEmails);
   }
 
   const handleAcceptRequest = (requestId, fromUserId) => {
@@ -170,9 +186,27 @@ export default function Friends({ navigation }) {
           {showOverlay && (
             <View style={styles.overlayBackground}>
               <View style={styles.overlayCard}>
-                <Text style={styles.overlayTitle}>Pending Friend Requests</Text>
+                <Text style={styles.overlayTitle}>Incoming Friend Requests</Text>
                 <View style={styles.sectionPlaceholder}>
-                  <Text style={styles.sectionText}>No pending requests</Text>
+                  {/*<Text style={styles.sectionText}>No pending requests</Text>*/}
+                  <FlatList
+                    data={reqFrom}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                      <View style={styles.reqFrom}>
+                        {/*<Ionicons
+                          name="person-outline"
+                          size={24}
+                          color="#FFFFFF"
+                          style={styles.notificationIcon}
+                        />*/}
+                    <Text style={styles.resultText}>{item}</Text>
+                    <Pressable onPress={() => handleAcceptRequest(reqId, fromUserId)} style={styles.acceptButton}>
+                      <Text>Accept</Text>
+                    </Pressable>
+                  </View>
+                )}
+              />
                 </View>
                 <Pressable
                   style={styles.closeButton}
@@ -265,7 +299,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     width: '90%',
-    maxWidth: 400,
+    maxWidth: 1000,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -278,7 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 10,
     paddingVertical: 30,
-    paddingHorizontal: 40,
+    paddingHorizontal: 0,
     marginBottom: 15,
     alignItems: 'center',
     borderWidth: 1,
@@ -288,7 +322,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     width: '100%',
-    height: 100,
+    height: 400,
   },
   sectionText: {
     color: '#FFFFFF',
@@ -377,7 +411,7 @@ const styles = StyleSheet.create({
     borderColor: '#FFFFFF',
   },
   overlayTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
     color: '#FFFFFF',
     textAlign: 'center',
@@ -417,5 +451,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
     borderRadius: 20,
     justifyContent: 'center',
+  },
+  acceptButton: {
+    padding: 15,
+    marginLeft: 10,
+    backgroundColor: 'skyblue',
+    borderRadius: 20,
+    justifyContent: 'center',
+  },
+  reqFrom: {
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: "flex-end",
+    justifyContent: 'flex-end',
   }
 });
