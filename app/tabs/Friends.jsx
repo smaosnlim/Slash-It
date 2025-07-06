@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,6 +15,7 @@ export default function Friends({ navigation }) {
   //const [searchText, setSearchText] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [reqFrom, setReqFrom] = useState([]); 
+  const [friendsList, setFriendsList] = useState([]);
   
 
   const db = getFirestore(app);
@@ -23,6 +24,23 @@ export default function Friends({ navigation }) {
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
+
+  const fetchFriends = async () => {
+    try {
+      const userDoc = await getDoc(doc(db, 'slash-it-users', currentUserId));
+      const friends = userDoc.exists() && userDoc.data().friends ? userDoc.data().friends : [];
+      const friendEmails = await getEmailsFromUserIds(friends);
+      const friendsData = friends.map((id, index) => ({
+        userId: id,
+        email: friendEmails[index],
+      }));
+      setFriendsList(friendsData);
+      console.log('Friends list:', friendsData);
+    } catch (error) {
+      console.error('Error fetching friends:', error);
+      alert('Failed to fetch friends list.');
+    }
+  }
 
   const handleSearch = async (searchText) => {
     try {
@@ -128,8 +146,8 @@ export default function Friends({ navigation }) {
 
   const handleRejectRequest = async (requestId) => {
     try {
-      //await deleteDoc(doc(db, 'friend-requests', requestId));
-      await updateDoc(doc(db, 'friend-requests', requestId), { status: 'rejected' });
+      await deleteDoc(doc(db, 'friend-requests', requestId));
+      //await updateDoc(doc(db, 'friend-requests', requestId), { status: 'rejected' });
       alert('Friend request rejected.');
       findRequests();
     } catch (error) {
@@ -138,6 +156,11 @@ export default function Friends({ navigation }) {
     }
     
   }
+
+  useEffect(() => {
+    fetchFriends();
+    findRequests();
+  }, [])
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -197,6 +220,27 @@ export default function Friends({ navigation }) {
                 )}
               />
               
+            </View>
+            <View style={styles.card}>
+            <Text style={styles.sectionText}>Your Friends</Text>
+            <FlatList
+                data={friendsList}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.results}>
+                    <Ionicons
+                      name="person-outline"
+                      size={36}
+                      color="#FFFFFF"
+                      style={styles.notificationIcon}
+                    />
+                    <Text style={styles.resultText}>{item.email}</Text>
+                  </View>
+                )}
+                ListEmptyComponent={
+                  <Text style={styles.sectionText}>No friends yet</Text>
+                }
+              />
             </View>
             <View style={styles.buttonContainer}>
               <Pressable
