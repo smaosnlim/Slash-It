@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -82,7 +82,7 @@ export default function Friends({ navigation }) {
   const findRequests = async () => {
     
     const reqRef = collection(db, 'friend-requests');
-    const q = query(reqRef, where('toUserId', '==', currentUserId));
+    const q = query(reqRef, where('toUserId', '==', currentUserId), where('status', '==', 'pending'));
     //console.log(currentUserId);
     const pendingRequests = await getDocs(q);
     const reqResults = pendingRequests.docs
@@ -91,50 +91,52 @@ export default function Friends({ navigation }) {
     //setReqFrom(reqResults);
     //console.log(reqResults.length);
 
-
+    const tempReqId = reqResults.map(item => item.id);
     const tempReqFrom = reqResults.map(item => item.fromUserId);
     //DISPLAYS USER IDS THAT REQUESTS CAME FROM
+    console.log(tempReqId);
     console.log(tempReqFrom);
     const reqEmails = await getEmailsFromUserIds(tempReqFrom);
     //console.log(reqEmails);
-    setReqFrom(reqEmails);
+    const updatedReqResults = reqResults.map((item, index) => ({
+      email: reqEmails[index],
+      requestId: item.id,
+      fromUserId: item.fromUserId,
+      //requestId: tempReqId[index],
+      //fromUserId: tempReqFrom[index],
+    }));
+    setReqFrom(updatedReqResults);
   }
 
   const handleAcceptRequest = async (requestId, fromUserId) => {
-    /*
     try {
       await updateDoc(doc(db, 'friend-requests', requestId), { status: 'accepted' });
-
-      await setDoc(doc(db, `slash-it-users/${currentUserId}/friends`, fromUserId), {
-        friendUserId: fromUserId,
-        addedAt: serverTimestamp(),
+      await updateDoc(doc(db, `slash-it-users/${currentUserId}`), {
+        friends: arrayUnion(fromUserId),
       });
-      await setDoc(doc(db, `slash-it-users/${fromUserId}/friends`, currentUserId), {
-        friendUserId: currentUserId,
-        addedAt: serverTimestamp(),
+      await updateDoc(doc(db, `slash-it-users/${fromUserId}`), {
+        friends: arrayUnion(currentUserId),
       });
-
       alert('Friend request accepted!');
       findRequests();
     } catch (error) {
       console.error('Error accepting friend request:', error);
       alert('Failed to accept friend request.');
     }
-      */
 
   }
 
   const handleRejectRequest = async (requestId) => {
-    /*
     try {
-      await deleteDoc(doc(db, 'friend-requests', requestId));
+      //await deleteDoc(doc(db, 'friend-requests', requestId));
+      await updateDoc(doc(db, 'friend-requests', requestId), { status: 'rejected' });
       alert('Friend request rejected.');
       findRequests();
     } catch (error) {
       console.error('Error rejecting friend request:', error);
       alert('Failed to reject friend request.');
     }
-    */
+    
   }
 
   return (
@@ -220,7 +222,7 @@ export default function Friends({ navigation }) {
                   {/*<Text style={styles.sectionText}>No pending requests</Text>*/}
                   <FlatList
                     data={reqFrom}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
                       <View style={styles.reqFrom}>
                         {/*<Ionicons
@@ -229,8 +231,8 @@ export default function Friends({ navigation }) {
                           color="#FFFFFF"
                           style={styles.notificationIcon}
                         />*/}
-                    <Text style={styles.resultText}>{item}</Text>
-                    <Pressable onPress={() => handleAcceptRequest(reqId, fromUserId)} style={styles.acceptButton}>
+                    <Text style={styles.resultText}>{item.email}</Text>
+                    <Pressable onPress={() => handleAcceptRequest(item.requestId, item.fromUserId)} style={styles.acceptButton}>
                       {/*<Text>Accept</Text>*/}
                       <Ionicons
                         name="checkmark-outline"
@@ -239,7 +241,7 @@ export default function Friends({ navigation }) {
                         style={styles.notificationIcon}
                       />
                     </Pressable>
-                    <Pressable onPress={() => handleRejectRequest(reqId)} style={styles.acceptButton}>
+                    <Pressable onPress={() => handleRejectRequest(item.requestId)} style={styles.acceptButton}>
                       <Ionicons
                         name="close-outline"
                         size={16}
