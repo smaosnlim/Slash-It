@@ -100,12 +100,41 @@ export default function Friends({ navigation }) {
     setReqFrom(reqEmails);
   }
 
-  const handleAcceptRequest = (requestId, fromUserId) => {
+  const handleAcceptRequest = async (requestId, fromUserId) => {
+    /*
+    try {
+      await updateDoc(doc(db, 'friend-requests', requestId), { status: 'accepted' });
+
+      await setDoc(doc(db, `slash-it-users/${currentUserId}/friends`, fromUserId), {
+        friendUserId: fromUserId,
+        addedAt: serverTimestamp(),
+      });
+      await setDoc(doc(db, `slash-it-users/${fromUserId}/friends`, currentUserId), {
+        friendUserId: currentUserId,
+        addedAt: serverTimestamp(),
+      });
+
+      alert('Friend request accepted!');
+      findRequests();
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+      alert('Failed to accept friend request.');
+    }
+      */
 
   }
 
-  const handleRejectRequest = (requestId) => {
-
+  const handleRejectRequest = async (requestId) => {
+    /*
+    try {
+      await deleteDoc(doc(db, 'friend-requests', requestId));
+      alert('Friend request rejected.');
+      findRequests();
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+      alert('Failed to reject friend request.');
+    }
+    */
   }
 
   return (
@@ -202,8 +231,22 @@ export default function Friends({ navigation }) {
                         />*/}
                     <Text style={styles.resultText}>{item}</Text>
                     <Pressable onPress={() => handleAcceptRequest(reqId, fromUserId)} style={styles.acceptButton}>
-                      <Text>Accept</Text>
+                      {/*<Text>Accept</Text>*/}
+                      <Ionicons
+                        name="checkmark-outline"
+                        size={16}
+                        color="#50C878"                       
+                        style={styles.notificationIcon}
+                      />
                     </Pressable>
+                    <Pressable onPress={() => handleRejectRequest(reqId)} style={styles.acceptButton}>
+                      <Ionicons
+                        name="close-outline"
+                        size={16}
+                        color="#FF0000"
+                        style={styles.notificationIcon}
+                      />
+                      </Pressable>
                   </View>
                 )}
               />
@@ -453,10 +496,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   acceptButton: {
-    padding: 15,
+    //padding: 15,
     marginLeft: 10,
-    backgroundColor: 'skyblue',
-    borderRadius: 20,
+    marginBottom: 10,
+    backgroundColor: 'white',
+    borderRadius: 50,
     justifyContent: 'center',
   },
   reqFrom: {
