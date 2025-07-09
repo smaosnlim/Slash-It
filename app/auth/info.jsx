@@ -1,11 +1,15 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from 'expo-router';
 import { getAuth } from "firebase/auth";
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { Alert, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { app } from '../../backend/firebase';
 
-export default function Info({navigation}) {
+export default function Info({route}) {
+
+    const navigation = useNavigation();
+    const {userEmail, otherParams} = route.params;
 
     const [age, setAge] = useState('');
     const [occupation, setOccupation] = useState('');
@@ -21,15 +25,27 @@ export default function Info({navigation}) {
             const db = getFirestore(app);
 
             setDoc(doc(db, 'slash-it-users', userId), {
+                email: userEmail,
                 age: age,
                 occupation: occupation,
-                interests: interests.split(',').map(interest => interest.trim())
-            }, {merge: true}).then(() => {
+                interests: interests.split(',').map(interest => interest.trim()),
+                friends: [],
+              }, {merge: true}).then(() => {
                 console.log('Firestore write completed');
             }).catch((error) => {
                 console.error('Error writing to Firestore:', error);
                 Alert.alert('Error', 'Failed to save information. Please try again.');
             })
+
+            /*
+            setDoc(doc(collection(db, `slash-it-users/${userId}/friends`), 'placeholder'), {
+                initialized: true,
+            }, {merge: true}).then(() => {
+                console.log('Friends collection initialized');
+            }).catch((error) => {
+                console.error('Error initializing friends collection:', error);
+            });
+            */
 
 
             /*
