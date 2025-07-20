@@ -1,5 +1,4 @@
 {
-
   "expo": {
     "name": "slash-it",
     "slug": "slash-it",
@@ -34,7 +33,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
