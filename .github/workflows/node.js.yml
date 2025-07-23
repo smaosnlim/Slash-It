@@ -5,9 +5,9 @@
 name: CI Web
 on:
   push:
-    branches: [main]
+    branches: [system-test]
   pull_request:
-    branches: [main]
+    branches: [system-test]
 jobs:
   test-web:
     name: Run Jest Tests (Web)
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
       - run: npm install
       - run: npm test
