@@ -1,7 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import Constants from 'expo-constants';
-import OpenAI from 'openai';
 import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -175,8 +174,8 @@ export default function ExpenseTracker({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
-      <View style={styles.container}>
+    <SafeAreaView testID="safe-area-view" style={styles.outerContainer}>
+      <View testID="container-view" style={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>Expense Tracker</Text>
           <View style={styles.inputContainer}>

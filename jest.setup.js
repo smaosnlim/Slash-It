@@ -15,6 +15,7 @@ jest.mock('firebase/auth', () => ({
   initializeAuth: jest.fn(),
   getReactNativePersistence: jest.fn(),
   browserLocalPersistence: {},
+  signInWithEmailAndPassword: jest.fn(),
 }));
 
 jest.mock('firebase/firestore', () => ({
@@ -33,3 +34,15 @@ jest.mock('expo-modules-core', () => ({
 jest.mock('expo-linear-gradient', () => ({
   LinearGradient: jest.fn().mockImplementation(({ children }) => children),
 }));
+
+// Mock expo-constants
+jest.mock('expo-constants', () => ({
+  expoConfig: {
+    extra: {
+      XAI_API_KEY: 'mock-api-key',
+    },
+  },
+}));
+jest.mock('@expo/vector-icons');
+
+jest.mock('@react-native-picker/picker');

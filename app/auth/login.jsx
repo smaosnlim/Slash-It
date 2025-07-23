@@ -27,13 +27,15 @@ export default function Login({navigation}) {
       end={{ x: 0.5, y: 1 }}
       style={styles.container}
     >
-      <View style={styles.view}>
+      <View testID="login-container" style={styles.view}>
         <Image 
+        testID='logo-image'
           source={require("../../assets/images/slash-it-logo.png")}
           style={styles.image}
         />
         <Text style={styles.text}>Email</Text>
         <TextInput
+          testID='email-input'
           style={styles.textInput}
           placeholder="Enter your email"
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -44,6 +46,7 @@ export default function Login({navigation}) {
         />
         <Text style={styles.text}>Password</Text>
         <TextInput
+          testID='password-input'
           style={styles.textInput}
           placeholder="Enter your Password"
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -51,10 +54,10 @@ export default function Login({navigation}) {
           value={password}
           onChangeText={setPassword}
         />
-        <Pressable style={styles.button} onPress={handleLogin}>
+        <Pressable testID="login-button" style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
-        <Pressable onPress={() => navigation.navigate('signup')}>
+        <Pressable testID="signup-link" onPress={() => navigation.navigate('signup')}>
           <Text style= {styles.text}>Don't have an account? Sign Up</Text>
         </Pressable>
       </View>

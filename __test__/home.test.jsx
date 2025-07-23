@@ -39,6 +39,7 @@ describe('<Home />', () => {
     expect(getByText('Quick Actions')).toBeTruthy();
   });
 
+  //Integration Test?
   test('Log Out button navigates to login', async () => {
     const { getByText } = render(<Home navigation={mockNavigation} />);
     await fireEvent.press(getByText('Log Out'));
