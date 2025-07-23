@@ -83,15 +83,17 @@ export default function Info({route}) {
                 end={{ x: 0.5, y: 1 }}
                 style={styles.container}
             >
-            <SafeAreaView style={styles.view}>
+            <SafeAreaView testID="info-container" style={styles.view}>
             <ScrollView>
                 <Image 
+                    testID="logo-image"
                     source={require("../../assets/images/slash-it-logo.png")}
                     style={styles.image}
                 />
                 
                 <Text style={styles.text}>Age</Text>
                 <TextInput
+                  testID="age-input"
                   style={styles.textInput}
                   placeholder="Enter your age"
                   placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -101,6 +103,7 @@ export default function Info({route}) {
                 />
                 <Text style={styles.text}>Occupation</Text>
                 <TextInput
+                  testID="occupation-input"
                   style={styles.textInput}
                   placeholder="Enter your occupation"
                   placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -109,16 +112,17 @@ export default function Info({route}) {
                 />
                 <Text style={styles.text}>Interests (comma-separated)</Text>
                 <TextInput
+                  testID="interests-input"
                   style={styles.textInput}
                   placeholder="E.g., reading, gaming, hiking"
                   placeholderTextColor="rgba(255, 255, 255, 0.5)"
                   value={interests}
                   onChangeText={setInterests}
                 />
-                <Pressable style={styles.button} onPress={saveInfo}>
+                <Pressable testID="submit-button" style={styles.button} onPress={saveInfo}>
                     <Text style={styles.buttonText}>Submit</Text>
                 </Pressable>
-                <Pressable onPress={() => navigation.navigate('login')}>
+                <Pressable testID="login-link" onPress={() => navigation.navigate('login')}>
                     <Text style= {styles.text}>Already have an account? Log In</Text>
                 </Pressable>
             </ScrollView>

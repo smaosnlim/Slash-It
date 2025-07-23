@@ -71,13 +71,15 @@ export default function SignUp({navigation}) {
             end={{ x: 0.5, y: 1 }}
             style={styles.container}
         >
-        <View style = {styles.view}>
+        <View testID="signup-container" style = {styles.view}>
             <Image 
+            testID='logo-image'
                 source={require("../../assets/images/slash-it-logo.png")}
                 style={styles.image}
             />
             <Text style={styles.text}>Email</Text>
             <TextInput
+            testID='email-input'
                 style={styles.textInput}
                 placeholder="Enter your email"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -88,6 +90,7 @@ export default function SignUp({navigation}) {
             />
             <Text style={styles.text}>Password</Text>
             <TextInput
+              testID='password-input'
                 style={styles.textInput}
                 placeholder="Enter your Password"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -97,6 +100,7 @@ export default function SignUp({navigation}) {
             />
             <Text style={styles.text}>Re-enter Password</Text>
             <TextInput
+                testID='confirm-password-input'
                 style={styles.textInput}
                 placeholder="Re-Enter your Password"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -104,38 +108,11 @@ export default function SignUp({navigation}) {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
             />
-            {/*}
-            <Text style={styles.text}>Age</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your age"
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              value={age}
-              onChangeText={setAge}
-              keyboardType="numeric"
-            />
-            <Text style={styles.text}>Occupation</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your occupation"
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              value={occupation}
-              onChangeText={setOccupation}
-            />
-            <Text style={styles.text}>Interests (comma-separated)</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="E.g., reading, gaming, hiking"
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              value={interests}
-              onChangeText={setInterests}
-            />
-            */}
-            <Pressable style={styles.button} onPress={handleSignUp}>
+            <Pressable testID="signup-button" style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </Pressable>
             
-            <Pressable onPress={() => navigation.navigate('login')}>
+            <Pressable testID="login-link" onPress={() => navigation.navigate('login')}>
                 <Text style= {styles.text}>Already have an account? Log In</Text>
             </Pressable>
         </View>

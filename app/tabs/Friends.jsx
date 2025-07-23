@@ -2,7 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth } from "firebase/auth";
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -38,7 +38,7 @@ export default function Friends({ navigation }) {
       console.log('Friends list:', friendsData);
     } catch (error) {
       console.error('Error fetching friends:', error);
-      alert('Failed to fetch friends list.');
+      Alert.alert('Failed to fetch friends list.');
     }
   }
 
@@ -63,7 +63,7 @@ export default function Friends({ navigation }) {
       //console.log(results)
     } catch (error) {
       console.error('Error searching users:', error);
-      alert('Failed to search users.');
+      Alert.alert('Failed to search users.');
     }
   };
 
@@ -76,10 +76,10 @@ export default function Friends({ navigation }) {
         status: 'pending',
         //createdAt: serverTimestamp(),
       });
-      alert('Friend request sent!');
+      Alert.alert('Friend request sent!');
     } catch (error) {
       console.error('Error sending friend request:', error);
-      alert('Failed to send friend request.');
+      Alert.alert('Failed to send friend request.');
     }
   }
 
@@ -135,11 +135,11 @@ export default function Friends({ navigation }) {
       await updateDoc(doc(db, `slash-it-users/${fromUserId}`), {
         friends: arrayUnion(currentUserId),
       });
-      alert('Friend request accepted!');
+      Alert.alert('Friend request accepted!');
       findRequests();
     } catch (error) {
       console.error('Error accepting friend request:', error);
-      alert('Failed to accept friend request.');
+      Alert.alert('Failed to accept friend request.');
     }
 
   }
@@ -148,11 +148,11 @@ export default function Friends({ navigation }) {
     try {
       await deleteDoc(doc(db, 'friend-requests', requestId));
       //await updateDoc(doc(db, 'friend-requests', requestId), { status: 'rejected' });
-      alert('Friend request rejected.');
+      Alert.alert('Friend request rejected.');
       findRequests();
     } catch (error) {
       console.error('Error rejecting friend request:', error);
-      alert('Failed to reject friend request.');
+      Alert.alert('Failed to reject friend request.');
     }
     
   }
@@ -163,7 +163,8 @@ export default function Friends({ navigation }) {
   }, [])
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
+    <SafeAreaView style={styles.outerContainer}
+      testID="friends-container">
       <LinearGradient
         colors={['#1A1A2E', '#16213E']}
         start={{ x: 0.5, y: 0 }}
@@ -172,11 +173,14 @@ export default function Friends({ navigation }) {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.title}>Friends</Text>
+            <Text 
+            testID="friends-title"
+            style={styles.title}>Friends</Text>
           </View>
           <View style={styles.searchRow}>
             <View style={styles.searchContainer}>
               <TextInput
+                testID='search-input'
                 style={styles.searchInput}
                 placeholder="Search by username"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
@@ -188,32 +192,41 @@ export default function Friends({ navigation }) {
               findRequests();
               }}
               style={styles.notificationContainer}
-              
+              testID='notification-button'
             >
               <Ionicons
                 name="notifications-outline"
                 size={24}
                 color="#FFFFFF"
                 style={styles.notificationIcon}
+                testID='notification-icon'
               />
             </Pressable>
           </View>
           <View style={styles.mainContent}>
-            <View style={styles.card}>
-              <Text style={styles.sectionText}>Search Results</Text>
+            <View style={styles.card}
+            testID="search-results-card">
+              <Text 
+              testID='search-results-title'
+              style={styles.sectionText}>Search Results</Text>
               <FlatList
                 data={searchResult}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (
-                  <View style={styles.results}>
+                  <View style={styles.results}
+                  testID={`search-result-${item.id}`}>
                     <Ionicons
                       name="person-outline"
                       size={36}
                       color="#FFFFFF"
                       style={styles.notificationIcon}
+                      testID={`search-result-icon-${item.id}`}
                     />
-                    <Text style={styles.resultText}>{item.email}</Text>
-                    <Pressable onPress={() => handleAddFriend(item.id)} style={styles.addButton}>
+                    <Text style={styles.resultText}
+                    testID={`search-result-email-${item.id}`}
+                    >{item.email}</Text>
+                    <Pressable onPress={() => handleAddFriend(item.id)} style={styles.addButton}
+                    testID={`add-friend-button-${item.id}`}>
                       <Text>Add</Text>
                     </Pressable>
                   </View>

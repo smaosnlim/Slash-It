@@ -11,15 +11,12 @@ jest.mock('firebase/app', () => ({
 
 jest.mock('firebase/auth', () => ({
   signOut: jest.fn().mockResolvedValue(undefined),
-  getAuth: jest.fn(),
+  getAuth: jest.fn().mockReturnValue({ currentUser: { uid: 'test-uid' } }),
   initializeAuth: jest.fn(),
   getReactNativePersistence: jest.fn(),
   browserLocalPersistence: {},
   signInWithEmailAndPassword: jest.fn(),
-}));
-
-jest.mock('firebase/firestore', () => ({
-  getFirestore: jest.fn(),
+  createUserWithEmailAndPassword: jest.fn(),
 }));
 
 // Mock expo-modules-core
