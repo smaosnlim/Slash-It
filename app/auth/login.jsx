@@ -6,6 +6,9 @@ import { auth } from '../../backend/firebase';
 
 export default function Login({navigation}) {
 
+//const router = useRouter();
+  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,7 +16,7 @@ export default function Login({navigation}) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Successful', 'Login Successful!');
-      //router.push('/home');
+      //router.navigate('home');
       navigation.navigate('home');
     } catch (error) {
       Alert.alert('Error', error.message || "Something went wrong");
@@ -58,6 +61,8 @@ export default function Login({navigation}) {
           <Text style={styles.buttonText}>Log In</Text>
         </Pressable>
         <Pressable testID="signup-link" onPress={() => navigation.navigate('signup')}>
+        {/*<Pressable testID="signup-link" onPress={() => router.navigate("/signup")}>*/}
+        
           <Text style= {styles.text}>Don't have an account? Sign Up</Text>
         </Pressable>
       </View>
