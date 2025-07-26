@@ -1,6 +1,6 @@
-/*
+
 import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+//import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
@@ -76,10 +76,7 @@ export default function Insights({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-      <LinearGradient
-        colors={['#1A1A2E', '#16213E']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
+      <View
         style={styles.gradient}
       >
         <View style={styles.container}>
@@ -123,7 +120,7 @@ export default function Insights({ navigation, route }) {
             </Pressable>
           </View>
         </View>
-      </LinearGradient>
+      </View>
     </SafeAreaView>
   );
 }
@@ -246,21 +243,3 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
-*/
-
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-export default function Insights({navigation}) {
-    return (
-        <SafeAreaView style = {styles.outerContainer}>
-            <View style = {styles.container}>
-                <Text> See how you can grow your wealth!</Text>
-                <Text>Investments</Text>
-                <Pressable style = {styles.button} onPress = {() => navigation.navigate('Home')}>
-                    <Text>Home</Text>
-                </Pressable>
-            </View>
-        </SafeAreaView>
-    )
-}
