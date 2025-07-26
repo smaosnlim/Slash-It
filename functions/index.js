@@ -100,3 +100,37 @@ exports.getDeals = onCall( {}, async (request) => {
     throw new https.HttpsError('internal', 'Failed to scrape deals');
   }
 });
+
+const base_url = "https://www.alphavantage.co/query?function=NEWS_SENTIMENT&";
+const topicList = ["blockchain"];
+
+exports.getNewsSentiment = onCall( {
+    secrets: ["NEWS_API_KEY"] },
+    async (request) => {
+      try {
+        const combinedTopics = "topics=" + topicList.join(",");
+        
+        // Get API URL (replicating getApiUrl)
+        const apiKey = process.env.NEWS_API_KEY;
+        
+        const url = `${base_url}${combinedTopics}&apikey=${apiKey}`;
+        console.log("API URL:", url);
+
+        // Fetch data from Alpha Vantage
+        const response = await axios.get(url);
+        const newsData = response.data;
+
+        // Return the news sentiment data
+        return {
+          status: "success",
+          data: newsData.feed || [], // Return the feed or an empty array
+          timestamp: new Date().toISOString()
+        };
+      } catch (error) {
+        console.error("Error fetching news sentiment:", error.message);
+        throw new https.HttpsError(
+          "internal",
+          `Failed to fetch news sentiment: ${error.message}`
+        );
+    }
+});
