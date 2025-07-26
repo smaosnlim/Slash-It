@@ -66,13 +66,14 @@ export default function Investments({navigation}) {
 
 const styles = StyleSheet.create({
     outerContainer: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#1A1A2E'
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF'
+        backgroundColor: '#1A1A2E',
     },
     button: {
         width: 100,
