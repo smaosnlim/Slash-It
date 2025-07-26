@@ -1,18 +1,170 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { getAuth } from "firebase/auth";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { Alert, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const { app } = require('../../backend/firebase'); 
+
+
 export default function Friends({ navigation }) {
+
   const [showOverlay, setShowOverlay] = useState(false);
+  //const [searchText, setSearchText] = useState('');
+  const [searchResult, setSearchResult] = useState([]);
+  const [reqFrom, setReqFrom] = useState([]); 
+  const [friendsList, setFriendsList] = useState([]);
+  
+
+  const db = getFirestore(app);
+  const currentUserId = getAuth(app).currentUser.uid;
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
 
+  const fetchFriends = async () => {
+    try {
+      const userDoc = await getDoc(doc(db, 'slash-it-users', currentUserId));
+      const friends = userDoc.exists() && userDoc.data().friends ? userDoc.data().friends : [];
+      const friendEmails = await getEmailsFromUserIds(friends);
+      const friendsData = friends.map((id, index) => ({
+        userId: id,
+        email: friendEmails[index],
+      }));
+      setFriendsList(friendsData);
+      console.log('Friends list:', friendsData);
+    } catch (error) {
+      console.error('Error fetching friends:', error);
+      Alert.alert('Failed to fetch friends list.');
+    }
+  }
+
+  const handleSearch = async (searchText) => {
+    try {
+      const usersRef = collection(db, 'slash-it-users');
+      const normalizedQuery = searchText.toLowerCase();
+      /*
+      const q = query(usersRef, 
+        where('email', '>=', searchText.toLowerCase()), 
+        where('email', '<=', searchText.toLowerCase() + '\uf8ff')
+      );
+      */
+      //console.log(searchText)
+      //Must be exact match in email
+      const q = query(usersRef, where('email', '==', normalizedQuery));
+      const querySnapshot = await getDocs(q);
+      const results = querySnapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(user => user.id !== currentUserId);
+      setSearchResult(results);
+      //console.log(results)
+    } catch (error) {
+      console.error('Error searching users:', error);
+      Alert.alert('Failed to search users.');
+    }
+  };
+
+  const handleAddFriend = async (toUserId) => {
+    try {
+      const friendRequestsRef = collection(db, 'friend-requests');
+      await addDoc(friendRequestsRef, {
+        fromUserId: currentUserId,
+        toUserId,
+        status: 'pending',
+        //createdAt: serverTimestamp(),
+      });
+      Alert.alert('Friend request sent!');
+    } catch (error) {
+      console.error('Error sending friend request:', error);
+      Alert.alert('Failed to send friend request.');
+    }
+  }
+
+  const getEmailsFromUserIds = async (userIds) => {
+  try {
+    const emails = [];
+    for (const userId of userIds) {
+      const userDoc = await getDoc(doc(db, 'slash-it-users', userId));
+      emails.push(userDoc.exists() ? userDoc.data().email : 'Unknown');
+    }
+    return emails;
+    } catch (error) {
+      console.error('Error fetching user emails:', error);
+      return [];
+    }
+  };
+
+  const findRequests = async () => {
+    
+    const reqRef = collection(db, 'friend-requests');
+    const q = query(reqRef, where('toUserId', '==', currentUserId), where('status', '==', 'pending'));
+    //console.log(currentUserId);
+    const pendingRequests = await getDocs(q);
+    const reqResults = pendingRequests.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(user => user.id !== currentUserId);
+    //setReqFrom(reqResults);
+    //console.log(reqResults.length);
+
+    const tempReqId = reqResults.map(item => item.id);
+    const tempReqFrom = reqResults.map(item => item.fromUserId);
+    //DISPLAYS USER IDS THAT REQUESTS CAME FROM
+    console.log(tempReqId);
+    console.log(tempReqFrom);
+    const reqEmails = await getEmailsFromUserIds(tempReqFrom);
+    //console.log(reqEmails);
+    const updatedReqResults = reqResults.map((item, index) => ({
+      email: reqEmails[index],
+      requestId: item.id,
+      fromUserId: item.fromUserId,
+      //requestId: tempReqId[index],
+      //fromUserId: tempReqFrom[index],
+    }));
+    setReqFrom(updatedReqResults);
+  }
+
+  const handleAcceptRequest = async (requestId, fromUserId) => {
+    try {
+      await updateDoc(doc(db, 'friend-requests', requestId), { status: 'accepted' });
+      await updateDoc(doc(db, `slash-it-users/${currentUserId}`), {
+        friends: arrayUnion(fromUserId),
+      });
+      await updateDoc(doc(db, `slash-it-users/${fromUserId}`), {
+        friends: arrayUnion(currentUserId),
+      });
+      Alert.alert('Friend request accepted!');
+      findRequests();
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+      Alert.alert('Failed to accept friend request.');
+    }
+
+  }
+
+  const handleRejectRequest = async (requestId) => {
+    try {
+      await deleteDoc(doc(db, 'friend-requests', requestId));
+      //await updateDoc(doc(db, 'friend-requests', requestId), { status: 'rejected' });
+      Alert.alert('Friend request rejected.');
+      findRequests();
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+      Alert.alert('Failed to reject friend request.');
+    }
+    
+  }
+
+  useEffect(() => {
+    fetchFriends();
+    findRequests();
+  }, [])
+
   return (
-    <SafeAreaView style={styles.outerContainer}>
+    <SafeAreaView style={styles.outerContainer}
+      testID="friends-container">
       <LinearGradient
         colors={['#1A1A2E', '#16213E']}
         start={{ x: 0.5, y: 0 }}
@@ -21,30 +173,87 @@ export default function Friends({ navigation }) {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.title}>Friends</Text>
+            <Text 
+            testID="friends-title"
+            style={styles.title}>Friends</Text>
           </View>
           <View style={styles.searchRow}>
             <View style={styles.searchContainer}>
               <TextInput
+                testID='search-input'
                 style={styles.searchInput}
                 placeholder="Search by username"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                onChangeText={handleSearch}
               />
             </View>
-            <Pressable onPress={toggleOverlay} style={styles.notificationContainer}>
+            <Pressable onPress={() => {
+              toggleOverlay();
+              findRequests();
+              }}
+              style={styles.notificationContainer}
+              testID='notification-button'
+            >
               <Ionicons
                 name="notifications-outline"
                 size={24}
                 color="#FFFFFF"
                 style={styles.notificationIcon}
+                testID='notification-icon'
               />
             </Pressable>
           </View>
           <View style={styles.mainContent}>
+            <View style={styles.card}
+            testID="search-results-card">
+              <Text 
+              testID='search-results-title'
+              style={styles.sectionText}>Search Results</Text>
+              <FlatList
+                data={searchResult}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                  <View style={styles.results}
+                  testID={`search-result-${item.id}`}>
+                    <Ionicons
+                      name="person-outline"
+                      size={36}
+                      color="#FFFFFF"
+                      style={styles.notificationIcon}
+                      testID={`search-result-icon-${item.id}`}
+                    />
+                    <Text style={styles.resultText}
+                    testID={`search-result-email-${item.id}`}
+                    >{item.email}</Text>
+                    <Pressable onPress={() => handleAddFriend(item.id)} style={styles.addButton}
+                    testID={`add-friend-button-${item.id}`}>
+                      <Text>Add</Text>
+                    </Pressable>
+                  </View>
+                )}
+              />
+              
+            </View>
             <View style={styles.card}>
-              <View style={styles.sectionPlaceholder}>
-                <Text style={styles.sectionText}>Search Results</Text>
-              </View>
+            <Text style={styles.sectionText}>Your Friends</Text>
+            <FlatList
+                data={friendsList}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.results}>
+                    <Ionicons
+                      name="person-outline"
+                      size={36}
+                      color="#FFFFFF"
+                      style={styles.notificationIcon}
+                    />
+                    <Text style={styles.resultText}>{item.email}</Text>
+                  </View>
+                )}
+                ListEmptyComponent={
+                  <Text style={styles.sectionText}>No friends yet</Text>
+                }
+              />
             </View>
             <View style={styles.buttonContainer}>
               <Pressable
@@ -55,17 +264,51 @@ export default function Friends({ navigation }) {
               </Pressable>
             </View>
           </View>
+          {/*
           <View style={styles.friendsSidebar}>
             <View style={styles.friendsContent}>
               <Text style={styles.friendsText}>Your Friends</Text>
             </View>
           </View>
+          */}
           {showOverlay && (
             <View style={styles.overlayBackground}>
               <View style={styles.overlayCard}>
-                <Text style={styles.overlayTitle}>Pending Friend Requests</Text>
+                <Text style={styles.overlayTitle}>Incoming Friend Requests</Text>
                 <View style={styles.sectionPlaceholder}>
-                  <Text style={styles.sectionText}>No pending requests</Text>
+                  {/*<Text style={styles.sectionText}>No pending requests</Text>*/}
+                  <FlatList
+                    data={reqFrom}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                      <View style={styles.reqFrom}>
+                        {/*<Ionicons
+                          name="person-outline"
+                          size={24}
+                          color="#FFFFFF"
+                          style={styles.notificationIcon}
+                        />*/}
+                    <Text style={styles.resultText}>{item.email}</Text>
+                    <Pressable onPress={() => handleAcceptRequest(item.requestId, item.fromUserId)} style={styles.acceptButton}>
+                      {/*<Text>Accept</Text>*/}
+                      <Ionicons
+                        name="checkmark-outline"
+                        size={16}
+                        color="#50C878"                       
+                        style={styles.notificationIcon}
+                      />
+                    </Pressable>
+                    <Pressable onPress={() => handleRejectRequest(item.requestId)} style={styles.acceptButton}>
+                      <Ionicons
+                        name="close-outline"
+                        size={16}
+                        color="#FF0000"
+                        style={styles.notificationIcon}
+                      />
+                      </Pressable>
+                  </View>
+                )}
+              />
                 </View>
                 <Pressable
                   style={styles.closeButton}
@@ -146,6 +389,7 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     alignSelf: 'center',
+    padding: 10
   },
   mainContent: {
     alignItems: 'center',
@@ -157,7 +401,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     width: '90%',
-    maxWidth: 400,
+    maxWidth: 1000,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -170,7 +414,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 10,
     paddingVertical: 30,
-    paddingHorizontal: 40,
+    paddingHorizontal: 0,
     marginBottom: 15,
     alignItems: 'center',
     borderWidth: 1,
@@ -180,7 +424,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     width: '100%',
-    height: 100,
+    height: 400,
   },
   sectionText: {
     color: '#FFFFFF',
@@ -269,7 +513,7 @@ const styles = StyleSheet.create({
     borderColor: '#FFFFFF',
   },
   overlayTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
     color: '#FFFFFF',
     textAlign: 'center',
@@ -293,4 +537,35 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+  results: {
+    padding: 20,
+    flexDirection: 'row',
+  },
+  resultText : {
+    color: "white",
+    padding: 20,
+    paddingTop: 20,
+    
+  },
+  addButton: {
+    padding: 15,
+    marginLeft: 10,
+    backgroundColor: 'skyblue',
+    borderRadius: 20,
+    justifyContent: 'center',
+  },
+  acceptButton: {
+    //padding: 15,
+    marginLeft: 10,
+    marginBottom: 10,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    justifyContent: 'center',
+  },
+  reqFrom: {
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: "flex-end",
+    justifyContent: 'flex-end',
+  }
 });

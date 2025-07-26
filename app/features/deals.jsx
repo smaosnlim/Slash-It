@@ -1,135 +1,156 @@
+
 import { FlatList, Image, Linking, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useEffect, useMemo, useState } from 'react';
+import { FlatList, Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const functions = getFunctions();
-const getDeals = useMemo(() => httpsCallable(functions, 'getDeals'), []);
-
-export default function Deals({ navigation }) {
-
+const Deals = ({ navigation }) => {
   const [deals, setDeals] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const getDeals = useMemo(() => httpsCallable(functions, 'getDeals'), []);
 
   useEffect(() => {
     const fetchDeals = async () => {
-      try {
-        //const getDeals = httpsCallable(functions, 'getDeals');
-        const result = await getDeals();
-        setDeals(result.data.deals);
-        console.log("Deals fetched successfully:", result.data);
-      } catch (error) {
-        console.error("Error fetching deals:", error);
+      if (deals.length === 0 && !loading) {
+        setLoading(true);
+        try {
+          const result = await getDeals();
+          setDeals(result.data.deals || []);
+          console.log("Deals fetched successfully:", result.data);
+        } catch (error) {
+          console.error("Error fetching deals:", error);
+          setError("Failed to load deals. Please try again.");
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
     fetchDeals();
-  }, []);
 
-  const renderDeal = ({item}) => (
-    <View style={styles.dealPlaceholder}>
-    <TouchableOpacity
+
+  }, [deals.length, getDeals, loading]);
+
+
+  const renderDeal = ({ item }) => (
+    <Pressable
       style={styles.dealContainer}
-      onPress={() => Linking.openURL(item.link)}
+      onPress={() => Linking.openURL(item.link).catch(err => console.error('Error opening URL:', err))}
     >
       {item.image ? (
-        <Image 
+
+        <Image
           source={{ uri: item.image }}
           style={styles.dealImage}
-          resizeMode='contain'
-          />
-      ) : null}
-      <View style={styles.dealText}>
-        <Text style={styles.dealText}>{item.title}</Text>
-        <Text numberOfLines={3}>
+          resizeMode="cover"
+        />
+      ) : (
+        <View style={styles.placeholderImage} />
+      )}
+      <View style={styles.dealContent}>
+        <Text style={styles.dealTitle}>{item.title}</Text>
+        <Text style={styles.dealSummary} numberOfLines={3}>
+
           {item.summary}
         </Text>
       </View>
-    </TouchableOpacity>
-    </View>
-  )
+    </Pressable>
+  );
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-    {/*<ScrollView>*/}
-        <View style={styles.card}>
-            <Text style={styles.title}>Deals</Text>
-            
-            <FlatList
-              data={deals}
-              renderItem={renderDeal}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={styles.list}
-            />
-            <Pressable
-              style={styles.button}
-              onPress={() => navigation.navigate('Home')}
-            >
-            <Text style={styles.buttonText}>Home</Text>
-          </Pressable>
-        </View>
-      
-      {/*</ScrollView> */}
+
+      <View style={styles.container}>
+        <Text style={styles.title}>Hot Deals</Text>
+        {loading && <Text style={styles.loadingText}>Loading deals...</Text>}
+        {error && <Text style={styles.errorText}>{error}</Text>}
+        <FlatList
+          data={deals}
+          renderItem={renderDeal}
+          keyExtractor={(item, index) => `deal-${index}`}
+          contentContainerStyle={styles.list}
+          ListEmptyComponent={() => (
+            !loading && (
+              <Text style={styles.emptyText}>
+                No deals available at the moment
+              </Text>
+            )
+          )}
+        />
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text style={styles.buttonText}>Back to Home</Text>
+        </Pressable>
+      </View>
+
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
     backgroundColor: '#1A1A2E',
-    justifyContent: 'center',
-    alignItems: 'center',
-    
+
   },
-  card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 30,
-    width: '90%',
-    maxWidth: 400,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    marginTop: 50,
-    marginBottom: 20,
+  container: {
+    flex: 1,
+    padding: 16,
+
   },
   title: {
-    fontSize: 28,
-    fontWeight: '600',
+    fontSize: 32,
+    fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: 20,
+    marginBottom: 24,
     textAlign: 'center',
   },
   dealContainer: {
-    width: '100%',
-  },
-  dealPlaceholder: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 10,
-    paddingVertical: 30,
-    paddingHorizontal: 40,
-    marginBottom: 15,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    flexDirection: 'row',
+    backgroundColor: '#0c299eff',
+    borderRadius: 12,
+    marginBottom: 16,
+    overflow: 'hidden',
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
-    width: '100%',
-    height: 'auto', // Increased height for larger boxes
   },
-  dealText: {
-    color: '#FFFFFF',
-    fontSize: 14,
+  dealImage: {
+    width: 100,
+    height: 100,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+  },
+  placeholderImage: {
+    width: 100,
+    height: 100,
+    backgroundColor: '#2C2C2C',
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+  },
+  dealContent: {
+    flex: 1,
+    padding: 12,
+  },
+  dealTitle: {
+    fontSize: 18,
     fontWeight: '600',
+    color: '#FFFFFF',
+    marginBottom: 8,
+  },
+  dealSummary: {
+    fontSize: 14,
+    color: '#BBBBBB',
+    lineHeight: 20,
   },
   dealImage: {
     width: 100,
@@ -138,21 +159,40 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    width: 100,
-    backgroundColor: '#00D4FF',
+    backgroundColor: '#0288D1',
+    padding: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    padding: 10,
-    marginTop: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    marginTop: 16,
+    marginBottom: 24,
+
   },
   buttonText: {
-    color: '#1A1A2E',
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
   list: {
-    paddingBottom: 20,
+    paddingBottom: 16,
+  },
+  loadingText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginVertical: 20,
+    fontSize: 16,
+  },
+  errorText: {
+    color: '#FF5252',
+    textAlign: 'center',
+    marginVertical: 20,
+    fontSize: 16,
+  },
+  emptyText: {
+    color: '#BBBBBB',
+    textAlign: 'center',
+    marginVertical: 20,
+    fontSize: 16,
   },
 });
+
+export default Deals;

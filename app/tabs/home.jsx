@@ -39,8 +39,14 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.outerContainer} >      
-        <View style={styles.container}>
+
+    <SafeAreaView testID="safe-area-view" style={styles.outerContainer} >
+      <View
+        style={styles.gradient}
+        >
+      
+        <View testID="container-view" style={styles.container}>
+
           <View style={styles.header}>
             <Text style={styles.title}>Welcome Home</Text>
           </View>
@@ -50,10 +56,26 @@ export default function Home({ navigation }) {
             ))}
           </View>
           <View style={styles.buttonContainer}>
-            {Object.entries(buttons).map(([title, onPress], index) => (
-              <CustomButton key={index} title={title} onPress={onPress} />
-            ))}
-            <Pressable style={styles.button} onPress={handleLogout}>
+
+            <Pressable
+              style={styles.button}
+              onPress={() => navigation.navigate('Deals')}
+              accessibilityLabel="Deals"
+            >
+              <Text style={styles.buttonText}>Deals</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => navigation.navigate('Expense Tracker')}
+              accessibilityLabel="Expense Tracker"
+            >
+              <Text style={styles.buttonText}>Expense Tracker</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={handleLogout}
+              accessibilityLabel="Log Out"
+            >
               <Text style={styles.buttonText}>Log Out</Text>
             </Pressable>
           </View>
