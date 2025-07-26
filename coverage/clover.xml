@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1753036973821" clover="3.2.0">
+  <project timestamp="1753036973821" name="All files">
+    <metrics statements="28" coveredstatements="20" conditionals="4" coveredconditionals="1" methods="11" coveredmethods="6" elements="43" coveredelements="27" complexity="0" loc="28" ncloc="28" packages="3" files="4" classes="4"/>
+    <package name="app.features">
+      <metrics statements="16" coveredstatements="8" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="2"/>
+      <file name="bills.jsx" path="C:\Users\Egg\Desktop\Coding\orbital\Slash-It-main\app\features\bills.jsx">
+        <metrics statements="13" coveredstatements="6" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="1"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+      </file>
+      <file name="investments.jsx" path="C:\Users\Egg\Desktop\Coding\orbital\Slash-It-main\app\features\investments.jsx">
+        <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="app.tabs">
+      <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+      <file name="home.jsx" path="C:\Users\Egg\Desktop\Coding\orbital\Slash-It-main\app\tabs\home.jsx">
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="backend">
+      <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+      <file name="firebase.js" path="C:\Users\Egg\Desktop\Coding\orbital\Slash-It-main\backend\firebase.js">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

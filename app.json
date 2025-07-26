@@ -9,14 +9,19 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.smaosn.slashit",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.smaosn.slashit"
     },
     "web": {
       "bundler": "metro",
@@ -39,9 +44,22 @@
     "experiments": {
       "typedRoutes": true
     },
-    "expo": {
-      "extra": {
-        "XAI_API_KEY": "${EXPO_XAI_API_KEY}"
+    "extra": {
+      "XAI_API_KEY": "${EXPO_XAI_API_KEY}",
+      "router": {},
+      "eas": {
+        "projectId": "c66117cb-581b-4029-bdaa-3e091a9648a8"
+      }
+    },
+    "owner": "smaosn",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "enabled": true,
+      "url": "https://u.expo.dev/c66117cb-581b-4029-bdaa-3e091a9648a8",
+      "requestHeaders": {
+        "expo-channel-name": "production"
       }
     }
   }

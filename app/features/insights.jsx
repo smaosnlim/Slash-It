@@ -1,3 +1,4 @@
+/*
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
@@ -245,3 +246,21 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+*/
+
+import { Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export default function Insights({navigation}) {
+    return (
+        <SafeAreaView style = {styles.outerContainer}>
+            <View style = {styles.container}>
+                <Text> See how you can grow your wealth!</Text>
+                <Text>Investments</Text>
+                <Pressable style = {styles.button} onPress = {() => navigation.navigate('Home')}>
+                    <Text>Home</Text>
+                </Pressable>
+            </View>
+        </SafeAreaView>
+    )
+}

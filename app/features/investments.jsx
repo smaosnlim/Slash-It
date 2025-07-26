@@ -46,6 +46,7 @@ export default function Investments({navigation}) {
         <SafeAreaView style = {styles.outerContainer}>
             <View style = {styles.container}>
                 <Text> See how you can grow your wealth!</Text>
+                <Text>Investments</Text>
                 <Pressable style = {styles.button} onPress = {() => navigation.navigate('Home')}>
                     <Text>Home</Text>
                 </Pressable>

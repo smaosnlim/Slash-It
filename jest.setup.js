@@ -1,0 +1,45 @@
+// jest.setup.js
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+
+// Mock AsyncStorage
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+
+// Mock Firebase
+jest.mock('firebase/app', () => ({
+  initializeApp: jest.fn().mockReturnValue({}),
+}));
+
+jest.mock('firebase/auth', () => ({
+  signOut: jest.fn().mockResolvedValue(undefined),
+  getAuth: jest.fn().mockReturnValue({ currentUser: { uid: 'test-uid' } }),
+  initializeAuth: jest.fn(),
+  getReactNativePersistence: jest.fn(),
+  browserLocalPersistence: {},
+  signInWithEmailAndPassword: jest.fn(),
+  createUserWithEmailAndPassword: jest.fn(),
+}));
+
+// Mock expo-modules-core
+jest.mock('expo-modules-core', () => ({
+  EventEmitter: jest.fn(),
+  NativeModule: jest.fn(),
+  SharedObject: jest.fn(),
+  SharedRef: jest.fn(),
+}));
+
+// Mock expo-linear-gradient
+jest.mock('expo-linear-gradient', () => ({
+  LinearGradient: jest.fn().mockImplementation(({ children }) => children),
+}));
+
+// Mock expo-constants
+jest.mock('expo-constants', () => ({
+  expoConfig: {
+    extra: {
+      XAI_API_KEY: 'mock-api-key',
+    },
+  },
+}));
+jest.mock('@expo/vector-icons');
+
+jest.mock('@react-native-picker/picker');

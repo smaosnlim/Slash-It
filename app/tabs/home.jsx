@@ -15,15 +15,16 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.outerContainer} >
+    <SafeAreaView testID="safe-area-view" style={styles.outerContainer} >
       <LinearGradient
+        testID="linear-gradient"
         colors={['#1A1A2E', '#16213E']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         style={styles.gradient}
         >
       
-        <View style={styles.container}>
+        <View testID="container-view" style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>Welcome Home</Text>
           </View>
@@ -42,18 +43,21 @@ export default function Home({ navigation }) {
             <Pressable
               style={styles.button}
               onPress={() => navigation.navigate('Deals')}
+              accessibilityLabel="Deals"
             >
               <Text style={styles.buttonText}>Deals</Text>
             </Pressable>
             <Pressable
               style={styles.button}
               onPress={() => navigation.navigate('Expense Tracker')}
+              accessibilityLabel="Expense Tracker"
             >
               <Text style={styles.buttonText}>Expense Tracker</Text>
             </Pressable>
             <Pressable
               style={styles.button}
               onPress={handleLogout}
+              accessibilityLabel="Log Out"
             >
               <Text style={styles.buttonText}>Log Out</Text>
             </Pressable>
