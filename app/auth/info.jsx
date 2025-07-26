@@ -25,6 +25,9 @@ export default function Info({route}) {
             const db = getFirestore(app);
 
             setDoc(doc(db, 'slash-it-users', userId), {
+
+            //setDoc(doc(db, 'slash-it-users', userEmail), {
+
                 email: userEmail,
                 age: age,
                 occupation: occupation,

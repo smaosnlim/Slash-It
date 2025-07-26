@@ -1,3 +1,6 @@
+
+import { FlatList, Image, Linking, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -29,7 +32,10 @@ const Deals = ({ navigation }) => {
     };
 
     fetchDeals();
+
+
   }, [deals.length, getDeals, loading]);
+
 
   const renderDeal = ({ item }) => (
     <Pressable
@@ -37,6 +43,7 @@ const Deals = ({ navigation }) => {
       onPress={() => Linking.openURL(item.link).catch(err => console.error('Error opening URL:', err))}
     >
       {item.image ? (
+
         <Image
           source={{ uri: item.image }}
           style={styles.dealImage}
@@ -48,6 +55,7 @@ const Deals = ({ navigation }) => {
       <View style={styles.dealContent}>
         <Text style={styles.dealTitle}>{item.title}</Text>
         <Text style={styles.dealSummary} numberOfLines={3}>
+
           {item.summary}
         </Text>
       </View>
@@ -56,6 +64,7 @@ const Deals = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.outerContainer}>
+
       <View style={styles.container}>
         <Text style={styles.title}>Hot Deals</Text>
         {loading && <Text style={styles.loadingText}>Loading deals...</Text>}
@@ -80,6 +89,7 @@ const Deals = ({ navigation }) => {
           <Text style={styles.buttonText}>Back to Home</Text>
         </Pressable>
       </View>
+
     </SafeAreaView>
   );
 };
@@ -88,10 +98,12 @@ const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
     backgroundColor: '#1A1A2E',
+
   },
   container: {
     flex: 1,
     padding: 16,
+
   },
   title: {
     fontSize: 32,
@@ -140,6 +152,12 @@ const styles = StyleSheet.create({
     color: '#BBBBBB',
     lineHeight: 20,
   },
+  dealImage: {
+    width: 100,
+    height: 70,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
   button: {
     backgroundColor: '#0288D1',
     padding: 16,
@@ -147,6 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 16,
     marginBottom: 24,
+
   },
   buttonText: {
     color: '#FFFFFF',

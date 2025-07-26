@@ -1,10 +1,28 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { signOut } from 'firebase/auth';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from '../../backend/firebase';
 
+const mainThemeColor = '#1a1a2e';
+  
+const Card = ({title}) => {
+  return (
+    <View style={styles.sectionPlaceholder}>
+      <Text style={styles.sectionText}>{title}</Text>
+    </View>
+  );
+}
+
+const CustomButton = ({title, onPress}) => {
+  return (
+    <Pressable style={styles.button} onPress={onPress}>
+      <Text style={styles.buttonText}>{title}</Text>
+    </Pressable>
+  );
+}
+
 export default function Home({ navigation }) {
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -14,32 +32,31 @@ export default function Home({ navigation }) {
     }
   };
 
+  const cardList = ['Account Balance', 'Recent Transactions', 'Quick Actions'];
+  const buttons = {
+    'Deals': () => navigation.navigate('Deals'),
+    'Expense Tracker': () => navigation.navigate('Expense Tracker'),
+  };
+
   return (
+
     <SafeAreaView testID="safe-area-view" style={styles.outerContainer} >
-      <LinearGradient
-        testID="linear-gradient"
-        colors={['#1A1A2E', '#16213E']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
+      <View
         style={styles.gradient}
         >
       
         <View testID="container-view" style={styles.container}>
+
           <View style={styles.header}>
             <Text style={styles.title}>Welcome Home</Text>
           </View>
           <View style={styles.card}>
-            <View style={styles.sectionPlaceholder}>
-              <Text style={styles.sectionText}>Account Balance</Text>
-            </View>
-            <View style={styles.sectionPlaceholder}>
-              <Text style={styles.sectionText}>Recent Transactions</Text>
-            </View>
-            <View style={styles.sectionPlaceholder}>
-              <Text style={styles.sectionText}>Quick Actions</Text>
-            </View>
+            {cardList.map((title, index) => (
+              <Card key={index} title={title} />
+            ))}
           </View>
           <View style={styles.buttonContainer}>
+
             <Pressable
               style={styles.button}
               onPress={() => navigation.navigate('Deals')}
@@ -63,7 +80,6 @@ export default function Home({ navigation }) {
             </Pressable>
           </View>
         </View>
-      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -74,16 +90,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1A1A2E',
     border: '2px solid rgba(255, 255, 255, 0.1)',
   },
-  gradient: {
-    flex: 1,
-    //backgroundColor: 'rgb(26, 26, 46)'
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 100, // Add padding to control top spacing
-    paddingBottom: 150, // Add padding to control bottom spacing
+    paddingTop: 20, // Add padding to control top spacing
+    paddingBottom: 20, // Add padding to control bottom spacing
   },
   header: {
     marginBottom: 30,
@@ -95,7 +107,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   card: {
-    //backgroundColor: 'rgba(255, 255, 255, 0.05)',
     backgroundColor: 'rgb(26, 26, 46)',
     borderRadius: 15,
     padding: 20,

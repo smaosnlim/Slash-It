@@ -1,10 +1,20 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, signOut } from 'firebase/auth';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { app } from '../../backend/firebase';
+import { useState } from 'react';
+import { PieChart } from 'react-native-chart-kit';
+
+const colors = ['#ff4f33', '#ffdd33', '#28f144', '#76e2f1', '#504df9', '#ad4df9', '#f94dc7']
+const chartConfig = {
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+};
 
 export default function Account({ navigation }) {
+
+  const [pieData, setPieData] = useState([])
+
   const handleLogout = async () => {
     try {
       await signOut(getAuth(app));
@@ -15,7 +25,7 @@ export default function Account({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
+    <ScrollView style={styles.outerContainer}>
       <LinearGradient
         colors={['#1A1A2E', '#16213E']}
         start={{ x: 0.5, y: 0 }}
@@ -29,6 +39,16 @@ export default function Account({ navigation }) {
           <View style={styles.cardContainer}>
             <View style={styles.card}>
               <Text style={styles.sectionText}>Equity Growth</Text>
+              {data ? <PieChart
+                data = {pieData}
+                  width = {Dimensions.get('window').width - 50}
+                  height = {220}
+                  chartConfig={chartConfig}
+                  accessor="value"
+                  backgroundColor='transparent'
+                  paddingLeft='15'
+                  absolute
+              /> : <Text> No Chart Available </Text>}
               <View style={styles.chartPlaceholder}>
                 <Text style={styles.chartText}>Savings Growth Chart</Text>
                 <Text style={styles.chartText}>📈 +5% this month</Text>
@@ -87,7 +107,7 @@ export default function Account({ navigation }) {
           </View>
         </View>
       </LinearGradient>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
