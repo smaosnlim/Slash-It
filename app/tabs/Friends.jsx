@@ -153,10 +153,9 @@ export default function Friends({ navigation }) {
     } catch (error) {
       console.error('Error rejecting friend request:', error);
       Alert.alert('Failed to reject friend request.');
-    }
-    
+    }  
   }
-
+  
   useEffect(() => {
     fetchFriends();
     findRequests();

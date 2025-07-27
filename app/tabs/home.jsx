@@ -41,9 +41,6 @@ export default function Home({ navigation }) {
   return (
 
     <SafeAreaView testID="safe-area-view" style={styles.outerContainer} >
-      <View
-        style={styles.gradient}
-        >
       
         <View testID="container-view" style={styles.container}>
 

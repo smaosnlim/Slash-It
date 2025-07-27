@@ -1,10 +1,9 @@
-import { LinearGradient } from 'expo-linear-gradient';
+//import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, signOut } from 'firebase/auth';
-import { Pressable, StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { app } from '../../backend/firebase';
 import { useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
+import { app } from '../../backend/firebase';
 
 const colors = ['#ff4f33', '#ffdd33', '#28f144', '#76e2f1', '#504df9', '#ad4df9', '#f94dc7']
 const chartConfig = {
@@ -13,6 +12,7 @@ const chartConfig = {
 
 export default function Account({ navigation }) {
 
+  const [data, setData] = useState(null);
   const [pieData, setPieData] = useState([])
 
   const handleLogout = async () => {
@@ -26,10 +26,7 @@ export default function Account({ navigation }) {
 
   return (
     <ScrollView style={styles.outerContainer}>
-      <LinearGradient
-        colors={['#1A1A2E', '#16213E']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
+      <View
         style={styles.gradient}
       >
         <View style={styles.container}>
@@ -106,7 +103,7 @@ export default function Account({ navigation }) {
             </Pressable>
           </View>
         </View>
-      </LinearGradient>
+      </View>
     </ScrollView>
   );
 }

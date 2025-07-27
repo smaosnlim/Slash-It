@@ -9,6 +9,7 @@ import Info from './auth/info.jsx';
 import Login from './auth/login.jsx';
 import SignUp from './auth/signup.jsx';
 import Bills from './features/bills.jsx';
+import CreditCard from './features/creditcard.jsx';
 import Deals from './features/deals.jsx';
 import ExpenseTracker from './features/expensetracker.jsx';
 import Insights from './features/insights.jsx';
@@ -27,6 +28,7 @@ const Tab = createBottomTabNavigator();
 
 const ICON_MAP = {
   Home: 'home-outline',
+  Dashboard: 'home-outline',
   'Expense Tracker': 'calculator-outline',
   Deals: 'pricetag-outline',
   Investments: 'trending-up-outline',
@@ -35,6 +37,7 @@ const ICON_MAP = {
   Settings: 'settings-outline',
   Account: 'person-outline',
   Friends: 'people-outline',
+  CreditCard: 'card-outline',
 }
 
 function CustomDrawerContent({ navigation, state }) {
@@ -95,12 +98,13 @@ function MyDrawer() {
         headerTitleStyle: styles.headerTitleStyle,
       }}
     >
-      <Drawer.Screen name="Home" component={MyTabs} />
+      <Drawer.Screen name="Dashboard" component={MyTabs} />
       <Drawer.Screen name="Expense Tracker" component={ExpenseTracker} />
       <Drawer.Screen name="Deals" component={Deals} />
       <Drawer.Screen name="Investments" component={Investments} />
       <Drawer.Screen name="Bills" component={Bills} />
       <Drawer.Screen name="Insights" component={Insights} />
+      <Drawer.Screen name="CreditCard" component={CreditCard} />
     </Drawer.Navigator>
   );
 }
@@ -154,9 +158,9 @@ const styles = StyleSheet.create({
   tabBar: { 
     position: 'absolute', 
     backgroundColor: mainThemeColor, 
-    height: 60, 
-    borderTopWidth: 1, 
-    marginBottom: 20,
+    height: 80, 
+    borderTopWidth: 1,
+    marginLeft: 5
   },
   tabBarLabel: { 
     fontSize: 12,
