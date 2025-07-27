@@ -98,7 +98,7 @@ export default function Insights({ navigation, route }) {
               <PieChart
                 data={pieData}
                 width={Dimensions.get('window').width - 50}
-                height={220}
+                height={180}
                 chartConfig={chartConfig}
                 accessor="value"
                 backgroundColor="transparent"
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 100,
-    paddingBottom: 150,
+    paddingBottom: 100,
   },
   header: {
     marginBottom: 30,
@@ -184,10 +184,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+    
   },
   expenseText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 12,
     fontWeight: '600',
     textAlign: 'left',
   },
@@ -198,12 +199,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   chartContainer: {
-    marginVertical: 30,
+    marginVertical: 10,
     alignItems: 'center',
   },
   tipText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
     marginLeft: 10,
     marginBottom: 5,

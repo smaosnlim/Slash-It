@@ -82,7 +82,7 @@ const Deals = ({ navigation }) => {
         />
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Dashboard')}
         >
           <Text style={styles.buttonText}>Back to Home</Text>
         </Pressable>
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    alignItems: 'center',
   },
   dealImage: {
     width: 100,
@@ -137,10 +138,10 @@ const styles = StyleSheet.create({
   },
   dealContent: {
     flex: 1,
-    padding: 12,
+    padding: 12
   },
   dealTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
     marginBottom: 8,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   },
   dealImage: {
     width: 100,
-    height: 70,
+    height: 60,
     borderRadius: 10,
     marginBottom: 10,
   },
@@ -172,6 +173,7 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingBottom: 16,
+    
   },
   loadingText: {
     color: '#FFFFFF',

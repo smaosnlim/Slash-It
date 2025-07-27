@@ -142,7 +142,7 @@ export default function ExpenseTracker({ navigation }) {
     try {
       console.log('Navigation prop:', navigation);
       console.log('Attempting to navigate to "Home"');
-      navigation.navigate('Home');
+      navigation.navigate('Dashboard');
     } catch (error) {
       console.error('Navigation error:', error);
       if (navigation.canGoBack()) {
@@ -264,6 +264,8 @@ export default function ExpenseTracker({ navigation }) {
           onPress={handleConfirm}
         >
           <MaterialIcons name="check" size={24} color="#1A1A2E" />
+            
+          <Text>Confirm</Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -340,7 +342,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   pickerItem: {
-    color: '#FFFFFF',
+    color: 'white',
     //backgroundColor: '#1A1A2E',
     backgroundColor: "#FFFFFF", //changed options to white for visibility
     fontSize: 16,
@@ -370,7 +372,7 @@ const styles = StyleSheet.create({
   },
   expenseText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 12,
     flex: 1,
     paddingRight: 10,
   },
@@ -411,7 +413,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    width: 48,
+    width: 90,
     height: 48,
     backgroundColor: '#00D4FF',
     borderRadius: 10,

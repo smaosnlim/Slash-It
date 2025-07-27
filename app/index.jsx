@@ -37,7 +37,7 @@ const ICON_MAP = {
   Settings: 'settings-outline',
   Account: 'person-outline',
   Friends: 'people-outline',
-  CreditCard: 'card-outline',
+  'Credit Cards': 'card-outline',
 }
 
 function CustomDrawerContent({ navigation, state }) {
@@ -104,7 +104,7 @@ function MyDrawer() {
       <Drawer.Screen name="Investments" component={Investments} />
       <Drawer.Screen name="Bills" component={Bills} />
       <Drawer.Screen name="Insights" component={Insights} />
-      <Drawer.Screen name="CreditCard" component={CreditCard} />
+      <Drawer.Screen name="Credit Cards" component={CreditCard} />
     </Drawer.Navigator>
   );
 }

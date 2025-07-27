@@ -2,7 +2,7 @@ import { useNavigation } from 'expo-router';
 import { getAuth } from "firebase/auth";
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { app } from '../../backend/firebase';
 
 export default function Info({route}) {
@@ -79,13 +79,13 @@ export default function Info({route}) {
     }
 
     return (
-            <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 150 : 20}
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 150 : 20}
         >
-            <SafeAreaView testID="info-container" style={styles.view}>
-            <ScrollView>
+            
+            <View style={styles.view}>
                 <Image 
                     testID="logo-image"
                     source={require("../../assets/images/slash-it-logo.png")}
@@ -126,8 +126,8 @@ export default function Info({route}) {
                 <Pressable testID="login-link" onPress={() => navigation.navigate('login')}>
                     <Text style= {styles.text}>Already have an account? Log In</Text>
                 </Pressable>
-            </ScrollView>
-            </SafeAreaView>
+            </View>
+            
             </KeyboardAvoidingView>
         
       )
@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     height: 200,
     //marginBottom: 20,
     resizeMode: 'contain',
+    marginLeft: 20,
   },
   text: {
     color: '#FFFFFF',
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
-    margin: 10
+    margin: 10, 
   },
   buttonText: {
     color: '#1A1A2E',

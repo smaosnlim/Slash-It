@@ -181,7 +181,7 @@ export default function Friends({ navigation }) {
               <TextInput
                 testID='search-input'
                 style={styles.searchInput}
-                placeholder="Search by username"
+                placeholder="Search by Email"
                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
                 onChangeText={handleSearch}
               />
