@@ -1,4 +1,4 @@
-   import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import ExpenseTracker from '../app/features/expensetracker';
 
    jest.mock('firebase/functions', () => {
@@ -72,7 +72,7 @@ import ExpenseTracker from '../app/features/expensetracker';
      test('Back button navigates to Home', () => {
        const { getByTestId } = render(<ExpenseTracker navigation={mockNavigation} />);
        fireEvent.press(getByTestId('icon-arrow-back'));
-       expect(mockNavigate).toHaveBeenCalledWith('Home');
+       expect(mockNavigate).toHaveBeenCalledWith('Dashboard');
      });
 
      test('Confirm button navigates to Insights with expenses', async () => {

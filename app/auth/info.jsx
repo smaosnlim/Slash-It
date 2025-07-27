@@ -80,6 +80,7 @@ export default function Info({route}) {
 
     return (
         <KeyboardAvoidingView
+          testID='info-container'
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 150 : 20}

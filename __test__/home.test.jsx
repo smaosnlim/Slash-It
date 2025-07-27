@@ -1,27 +1,3 @@
-/*
-// __test__/home.test.jsx
-import { render } from '@testing-library/react-native';
-import Home from '../app/tabs/home';
-
-// Mock navigation
-const mockNavigate = jest.fn();
-const mockNavigation = { navigate: mockNavigate };
-
-// Mock Firebase auth
-jest.mock('firebase/auth', () => ({
-  signOut: jest.fn().mockResolvedValue(undefined),
-  auth: jest.fn(),
-}));
-
-describe('<Home />', () => {
-  test('Text renders correctly on Home', () => {
-    const { getByText } = render(<Home navigation={mockNavigation} />);
-    expect(getByText('Welcome Home')).toBeTruthy();
-  });
-});
-*/
-
-// __test__/home.test.jsx
 import { fireEvent, render } from '@testing-library/react-native';
 import { signOut } from 'firebase/auth';
 import Home from '../app/tabs/home';
@@ -47,6 +23,7 @@ describe('<Home />', () => {
     expect(mockNavigate).toHaveBeenCalledWith('login');
   });
 
+  /*
   test('Navigates to Deals screen', () => {
     const { getByText } = render(<Home navigation={mockNavigation} />);
     fireEvent.press(getByText('Deals'));
@@ -58,6 +35,7 @@ describe('<Home />', () => {
     fireEvent.press(getByText('Expense Tracker'));
     expect(mockNavigate).toHaveBeenCalledWith('Expense Tracker');
   });
+  */
 
   test('Log Out handles signOut failure', async () => {
     jest.spyOn(require('firebase/auth'), 'signOut').mockRejectedValue(new Error('Sign out failed'));

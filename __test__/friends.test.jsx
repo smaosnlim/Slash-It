@@ -1,7 +1,8 @@
 /*
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
-import * as firestore from 'firebase/firestore';
 import Friends from '../app/tabs/Friends';
+//import * as firestore from 'firebase/firestore';
+const firestore = require('firebase/firestore');
 
 // Mock react-native components
 
