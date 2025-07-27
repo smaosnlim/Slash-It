@@ -16,6 +16,11 @@ export default function SignUp({navigation}) {
     */
 
     const handleSignUp = async () => {
+        if (password.length < 6) {
+            Alert.alert('Error', 'Password must be at least 6 characters long');
+            return;
+        }
+
         if (password !== confirmPassword) {
             Alert.alert('Error', 'Passwords do not match');
             return;
@@ -62,6 +67,7 @@ export default function SignUp({navigation}) {
                 errorMessage = 'The password is too weak.';
             }
             Alert.alert('Error', error.message || "Something went wrong");
+            return;
         }
     }
 

@@ -137,6 +137,7 @@ export default function Friends({ navigation }) {
       });
       Alert.alert('Friend request accepted!');
       findRequests();
+      fetchFriends();
     } catch (error) {
       console.error('Error accepting friend request:', error);
       Alert.alert('Failed to accept friend request.');
