@@ -1,9 +1,8 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from 'expo-router';
 import { getAuth } from "firebase/auth";
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { Alert, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { app } from '../../backend/firebase';
 
 export default function Info({route}) {
@@ -80,12 +79,11 @@ export default function Info({route}) {
     }
 
     return (
-            <LinearGradient
-                colors={['#1A1A2E', '#16213E']}
-                start={{ x: 0.5, y: 0 }}
-                end={{ x: 0.5, y: 1 }}
-                style={styles.container}
-            >
+            <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 150 : 20}
+        >
             <SafeAreaView testID="info-container" style={styles.view}>
             <ScrollView>
                 <Image 
@@ -130,7 +128,7 @@ export default function Info({route}) {
                 </Pressable>
             </ScrollView>
             </SafeAreaView>
-            </LinearGradient>
+            </KeyboardAvoidingView>
         
       )
     }

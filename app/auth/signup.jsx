@@ -1,8 +1,7 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 //import { collection, doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { auth } from '../../backend/firebase';
 
 export default function SignUp({navigation}) {
@@ -67,11 +66,10 @@ export default function SignUp({navigation}) {
     }
 
     return (
-        <LinearGradient
-            colors={['#1A1A2E', '#16213E']}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
+        <KeyboardAvoidingView
             style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 150 : 20}
         >
         <View testID="signup-container" style = {styles.view}>
             <Image 
@@ -118,7 +116,7 @@ export default function SignUp({navigation}) {
                 <Text style= {styles.text}>Already have an account? Log In</Text>
             </Pressable>
         </View>
-        </LinearGradient>
+        </KeyboardAvoidingView>
     
   )
 }
